@@ -129,6 +129,11 @@ INSTALLED_APPS = (
     'main',
     # Django-south
     'south',
+    'smart_selects',
+    'main',
+    'usuarios',
+    'ayudantias',
+    'evaluaciones',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

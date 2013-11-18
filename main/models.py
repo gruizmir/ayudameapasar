@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
 from smart_selects.db_fields import ChainedForeignKey 
@@ -27,6 +28,13 @@ class Institucion(models.Model):
         null=True, 
         blank=True
     )
-
     def __unicode__(self):
         return self.nombre
+
+
+class EmailValidos(models.Model):
+    dominio = models.CharField(max_length=20L)
+    institucion = models.ForeignKey(Institucion)
+    
+    def __unicode__(self):
+        return "%s - %s" % (self.institucion.nombre, self.dominio)

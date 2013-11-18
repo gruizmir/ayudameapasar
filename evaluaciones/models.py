@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
 from ayudantias.models import Ayudantia
+from django.contrib.auth.models import User
+from usuarios.models import Ayudante
 
 class PuntuacionAyudantes(models.Model):
     puntaje = models.IntegerField(default=1)

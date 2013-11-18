@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
 from main.models import Institucion
+from django.contrib.auth.models import User
 
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, unique=True)
@@ -46,7 +48,7 @@ class AnuncioGeneral(models.Model):
     mensaje = models.TextField()
     enviar_email = models.BooleanField(default=False)
     hora_publicacion = models.DateTimeField(auto_now_add=True)
-    autor = models.ForeignKey(Usuario)
+    autor = models.ForeignKey(User)
     
     def __unicode__(self):
         return self.titulo
