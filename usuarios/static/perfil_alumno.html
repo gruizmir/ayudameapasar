@@ -1,0 +1,71 @@
+{% extends "template.html" %}
+
+{% load bootstrap_toolkit %}
+{% block main_top_content %}
+{% endblock %}
+
+{% block right_content %}
+<link href="/static/css/perfil.css" rel="stylesheet">
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#mi_panel">Mi panel</a></li>
+  <li><a href="#solicitudes">Mis solicitudes</a></li>
+  <li><a href="#evaluaciones">Evaluaciones pendientes</a></li>
+  {% if user.es_ayudante %}
+  <li><a href="#ayudantias">Mis ayudantías</a></li>
+  {% endif %}
+</ul>
+
+
+<div class="tab-content">
+  <!-- seccion "Mi panel" -->
+  <div class="tab-pane fade in active" id="mi_panel">
+    <div class="row">
+      <h3 class="bottom-spaced">{{user.get_full_name}}</h3>
+      <div class="col-md-3">
+        <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
+      </div>
+      <div class="col-md-6 userdata">
+        <p> {{user.email}}</p>
+        <p> {{user.perfil.fono|default:"Teléfono no disponible"}}</p>
+        <p> {{user.perfil.institucion}}</p>
+        <button id="edit-btn" class="btn btn-primary">Editar</button>
+      </div>
+      <div class="col-md-3">
+        <div class="eval-box">
+          <span>Nota como alumno</span>
+          <p>{{user.perfil.puntuacion|floatformat}}</p>
+          <span>en {{user.perfil.eval_qty}} calificaciones</span>
+        </div>
+
+        <div class="eval-box">
+          <span>Nota como ayudante</span>
+          <p>{{user.ayudante.puntuacion|floatformat}}</p>
+          <span>en {{user.ayudante.eval_qty}} calificaciones</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END seccion "Mi panel" -->
+
+  <!-- seccion "Mis solicitudes" -->
+  <div class="tab-pane fade" id="solicitudes">
+
+  </div>
+  <!-- END seccion "Mis solicitudes" -->
+
+  <!-- seccion "Evaluaciones pendientes" -->
+  <div class="tab-pane fade" id="evaluaciones">
+
+  </div>
+  <!-- END seccion "Mis solicitudes" -->
+  
+  {% if request.user.es_ayudante %}
+  <!-- seccion "Mis ayudantias" -->
+  <div class="tab-pane fade" id="ayudantias">
+    
+  </div>
+  <!-- END seccion "Mis solicitudes" -->
+  {% endif %}
+</div>
+
+{% endblock %}

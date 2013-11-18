@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from ayudantias.models import Ayudantia
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -11,8 +12,9 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from main.models import Institucion
-from usuarios.models import Perfil, Ayudante, UsuarioPorConfirmar
+from usuarios.models import Perfil, Ayudante, UsuarioPorConfirmar, InfoAcademica
 from usuarios.forms import RegisterForm, LoginForm
+import uuid
 
 
 def loginView(request):
@@ -29,7 +31,7 @@ def loginView(request):
             if user is not None:
                 login(request,user)
                 if redir==None:
-                    return HttpResponseRedirect("/perfil")
+                    return HttpResponseRedirect("/cuentas/perfil")
                 else:
                     return HttpResponseRedirect(redir)
         else:
@@ -47,12 +49,15 @@ def registerView(request):
             user.first_name = form.cleaned_data['nombre']
             user.last_name = form.cleaned_data['apellido']
             user.is_active = False
+            user.save()
             perfil = user.perfil
             perfil.institucion = form.cleaned_data['institucion']
             perfil.es_ayudante = form.cleaned_data['es_ayudante']
             perfil.save()
-            user.save()
-            sendConfirmationEmail(user)
+            if user.perfil.es_ayudante:
+                ayudante = Ayudante(usuario=user)
+                ayudante.save()
+            #~ sendConfirmationEmail(user)
             return HttpResponseRedirect("/")
         else:
             return render_to_response("register.html", {'form':form}, context_instance=RequestContext(request))
@@ -60,8 +65,10 @@ def registerView(request):
         form = RegisterForm()
         return render_to_response("register.html", {'form':form}, context_instance=RequestContext(request))
 
+
 def logoutView(request):
     logout(request)
+    return HttpResponseRedirect("/")
 
 
 def sendConfirmationEmail(user):
@@ -90,10 +97,37 @@ def confirm(request, token=None):
             try:
                 user = User.objects.get(email=request.GET['email'])
                 if user.is_active == False:
-                    user.is_active=True
-                    user.save()
-                return HttpResponseRedirect("/perfil")
+                    confirmar = UsuarioPorConfirmar(usuario=user)
+                    if confirmar.token == token:
+                        user.is_active=True
+                        user.save()
+                    else:
+                        raise Http404
+                return HttpResponseRedirect("/cuentas/perfil")
             except:
-                return HttpResponseRedirect("/register/")
+                return HttpResponseRedirect("/cuentas/registro/")
         else:
             raise PermissionDenied
+
+@login_required
+def mostrarPerfilPropio(request):
+    user = request.user
+    data = {}
+    data['user']=user
+    if user.perfil.es_ayudante:
+        try:
+            data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
+            data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
+        except ObjectDoesNotExist:
+            pass
+    return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))
+
+@login_required
+def mostrarPerfil(request, idUser):
+    user = get_object_or_404(User, pk=idUser)
+    data = {}
+    data['user'] = user
+    if user.perfil.es_ayudante:
+        data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
+        data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
+    return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))

@@ -17,7 +17,7 @@ class Perfil(models.Model):
         verbose_name_plural="Perfiles"
         
     def __unicode__(self):
-        return self.user.get_full_name()
+        return self.usuario.get_full_name()
     
 User.perfil = property(lambda u: Perfil.objects.get_or_create(usuario=u)[0])
 
@@ -28,7 +28,7 @@ class Ayudante(models.Model):
     eval_qty = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return self.user.get_full_name()
+        return self.usuario.get_full_name()
 
 
 class InfoAcademica(models.Model):
@@ -62,4 +62,4 @@ class AnuncioGeneral(models.Model):
 class UsuarioPorConfirmar(models.Model):
     usuario = models.ForeignKey(User)
     token = models.CharField(max_length=150L, null=False)
-    fecha = models.DateTimeField(auto_add_now=True)
+    fecha = models.DateTimeField(auto_now_add=True)

@@ -2,6 +2,23 @@ body {
     padding-top: 70px;
 }
 
+.main-container {
+    width:90%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;
+    margin-bottom:30px;
+}
+
+#left-content {
+    height:100%;
+}
+
+#right-content {
+    padding-left:15px;
+    border-left:1px solid rgba(0,0,0,0.2);
+}
+
 .trighted {
     text-align:right;
 }
@@ -43,14 +60,6 @@ body {
 .sides-unmargined {
     margin-right:0;
     margin-left:0;
-}
-
-#simple-seism-col {
-    display:block;
-}
-
-#sub-seism-col {
-    display:none;
 }
 
 .pagination {

@@ -1,0 +1,43 @@
+.profile_img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin-right: 20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 10px 10px 50px 10px;
+    border: 1px solid #BFBFBF;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.8);
+    -webkit-transform: rotate(-10deg);
+    -moz-transform: rotate(-10deg);
+    rotation: -10deg;
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=-10);
+}
+
+.userdata {
+    padding-left:25px;
+}
+
+.eval-box {
+    background-color: #5e75ff;
+    border-radius:5px;
+    padding:5px;
+    margin:5px 10px 10px 5px;
+    text-align:center;
+}
+
+.eval-box p {
+    font-family:'Rufina', serif;
+    color:#ffd821;
+    font-size:2.8em;
+}
+
+.eval-box span {
+    color:white;
+}
+
+.tab-pane {
+    margin-left: 20px;
+}
+
