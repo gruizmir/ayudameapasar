@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from usuarios.models import Perfil, Ayudante
-from usuarios.forms import RegisterForm, LoginForm
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core import mail
 from django.core.context_processors import csrf
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, SuspiciousOperation
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from main.models import Institucion
+from usuarios.models import Perfil, Ayudante, UsuarioPorConfirmar
+from usuarios.forms import RegisterForm, LoginForm
+
 
 def loginView(request):
     if request.method == "POST":
@@ -23,10 +28,10 @@ def loginView(request):
             user = authenticate(username=email, password=password)
             if user is not None:
                 login(request,user)
-                if redir is not None:
-                    return HttpResponseRedirect(redir)
-                else:
+                if redir==None:
                     return HttpResponseRedirect("/perfil")
+                else:
+                    return HttpResponseRedirect(redir)
         else:
             return render_to_response("login.html", {'form':form}, context_instance=RequestContext(request))
     else:
@@ -38,6 +43,16 @@ def registerView(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
+            user = User.objects.create_user(form.cleaned_data['email'], email=form.cleaned_data['email'], password=form.cleaned_data['password2'])
+            user.first_name = form.cleaned_data['nombre']
+            user.last_name = form.cleaned_data['apellido']
+            user.is_active = False
+            perfil = user.perfil
+            perfil.institucion = form.cleaned_data['institucion']
+            perfil.es_ayudante = form.cleaned_data['es_ayudante']
+            perfil.save()
+            user.save()
+            sendConfirmationEmail(user)
             return HttpResponseRedirect("/")
         else:
             return render_to_response("register.html", {'form':form}, context_instance=RequestContext(request))
@@ -47,3 +62,38 @@ def registerView(request):
 
 def logoutView(request):
     logout(request)
+
+
+def sendConfirmationEmail(user):
+    connection = mail.get_connection()
+    connection.open()
+    confReg = UsuarioPorConfirmar(usuario=user, token = uuid.uuid1().hex)
+    confRef.save()
+    msg = user.get_full_name() + u", welcome to Ayudame a Pasar!\n\n"
+    msg = msg + u"Confirma tu dirección haciendo click en el siguiente link: \n\n"
+    msgCustom = msg + settings.WEB_URL + u"/cuentas/confirmar/" + token + "?email=" + user.email
+    subject = "Confirma tu registro en AyudameaPasar.cl"
+    try:
+        email = mail.EmailMessage(subject, msgCustom, settings.EMAIL_HOST_USER, [user.email], connection=connection)
+    except:
+        return HttpResponseRedirect("/")
+    connection.send_messages([email])
+    connection.close()
+    return True
+
+
+def confirm(request, token=None):
+    if token==None:
+        return HttpResponseRedirect("/")
+    else:
+        if 'email' in request.GET:
+            try:
+                user = User.objects.get(email=request.GET['email'])
+                if user.is_active == False:
+                    user.is_active=True
+                    user.save()
+                return HttpResponseRedirect("/perfil")
+            except:
+                return HttpResponseRedirect("/register/")
+        else:
+            raise PermissionDenied

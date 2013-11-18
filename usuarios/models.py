@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, unique=True)
-    institucion = models.ForeignKey(Institucion)
+    institucion = models.ForeignKey(Institucion, null=True,blank=True)
     avatar = models.ImageField(blank=True, upload_to='user_pics', default='/static/img/profile_picture.png')
-    puntuacion = models.FloatField(default=0.0)
-    eval_qty = models.IntegerField(default=0, verbose_name="Cantidad de evaluaciones")
-    fono = models.CharField(max_length=15L)
-    es_ayudante = models.BooleanField(default=False)
+    puntuacion = models.FloatField(default=0.0, blank=True)
+    eval_qty = models.IntegerField(default=0, verbose_name="Cantidad de evaluaciones", blank=True)
+    fono = models.CharField(max_length=15L, null=True, blank=True)
+    es_ayudante = models.BooleanField(default=False, blank=True)
     
     class Meta:
         verbose_name_plural="Perfiles"
@@ -19,7 +19,7 @@ class Perfil(models.Model):
     def __unicode__(self):
         return self.user.get_full_name()
     
-User.perfil = property(lambda u: Perfil.objects.get_or_create(user=u)[0])
+User.perfil = property(lambda u: Perfil.objects.get_or_create(usuario=u)[0])
 
 
 class Ayudante(models.Model):
@@ -50,6 +50,16 @@ class AnuncioGeneral(models.Model):
     enviar_email = models.BooleanField(default=False)
     hora_publicacion = models.DateTimeField(auto_now_add=True)
     autor = models.ForeignKey(User)
+
+    class Meta:
+        verbose_name="Anuncio General"
+        verbose_name_plural="Anuncios Generales"
     
     def __unicode__(self):
         return self.titulo
+
+
+class UsuarioPorConfirmar(models.Model):
+    usuario = models.ForeignKey(User)
+    token = models.CharField(max_length=150L, null=False)
+    fecha = models.DateTimeField(auto_add_now=True)

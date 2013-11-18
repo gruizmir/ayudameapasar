@@ -116,6 +116,8 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'bootstrap_toolkit',
+    'django_admin_bootstrapped',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -128,7 +130,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'main',
     # Django-south
-    'south',
+    #~ 'south',
     'smart_selects',
     'main',
     'usuarios',
@@ -166,3 +168,15 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = "usuarios.Perfil"
+
+#Email Params
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '' #cuenta gmail de preferencia
+EMAIL_HOST_PASSWORD = '' 
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+WEB_URL = "http://localhost:8000"
+#WEB_URL = "http://ayudameapasar.cl"
