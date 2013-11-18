@@ -1,0 +1,75 @@
+body {
+    padding-top: 70px;
+}
+
+.trighted {
+    text-align:right;
+}
+
+.tlefted {
+    text-align:left;
+}
+
+.tcentered {
+    text-align:center
+}
+
+.lefted {
+    float:left;
+    margin-left: 15px;
+}
+
+.righted {
+    float:right;
+    margin-right: 15px;
+}
+
+.top-spaced {
+    margin-top:25px;
+}
+
+.bottom-spaced {
+    margin-bottom:25px;
+}
+
+.left-spaced {
+    margin-left:15px;
+}
+
+.right-spaced {
+    margin-right:15px;
+}
+
+.sides-unmargined {
+    margin-right:0;
+    margin-left:0;
+}
+
+#simple-seism-col {
+    display:block;
+}
+
+#sub-seism-col {
+    display:none;
+}
+
+.pagination {
+    text-align: center;
+    width: 100%;
+}
+
+.pagination-left {
+    text-align: right;
+}
+
+.boxed {
+    background-color: rgba(0,0,0,0.08);
+    padding: 15px 10px 10px 10px;
+    border-radius: 10px;
+    box-shadow: inset 0px -1px 3px 0px rgba(0,0,0,0.5);
+}
+
+.footer {
+    border-top:1px solid rgba(0,0,0,0.08);
+    padding-top:15px;
+}

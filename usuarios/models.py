@@ -9,8 +9,9 @@ class Perfil(models.Model):
     institucion = models.ForeignKey(Institucion)
     avatar = models.ImageField(blank=True, upload_to='user_pics', default='/static/img/profile_picture.png')
     puntuacion = models.FloatField(default=0.0)
-    eval_qty = models.IntegerField(default=0)
+    eval_qty = models.IntegerField(default=0, verbose_name="Cantidad de evaluaciones")
     fono = models.CharField(max_length=15L)
+    es_ayudante = models.BooleanField(default=False)
     
     class Meta:
         verbose_name_plural="Perfiles"
