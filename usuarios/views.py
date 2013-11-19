@@ -128,6 +128,9 @@ def mostrarPerfil(request, idUser):
     data = {}
     data['user'] = user
     if user.perfil.es_ayudante:
-        data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
-        data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
+        try:
+            data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
+            data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
+        except ObjectDoesNotExist:
+            pass
     return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))

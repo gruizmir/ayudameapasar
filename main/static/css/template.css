@@ -82,3 +82,29 @@ body {
     border-top:1px solid rgba(0,0,0,0.08);
     padding-top:15px;
 }
+#fader {
+    background: black;
+    opacity: .5;
+    -moz-opacity: .5;
+    -filter: alpha(opacity=50);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 15;
+    display: none;
+}
+
+#spinner-div {
+    width: 150px;
+    margin-left: 45%;
+    margin-right: 45%;
+    height: 150px;
+    margin-top: 250px;
+    margin-bottom: auto;
+    background: transparent;
+    position: fixed;
+    z-index: 200;
+    display:none;
+}

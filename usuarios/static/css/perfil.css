@@ -21,23 +21,46 @@
 
 .eval-box {
     background-color: #5e75ff;
-    border-radius:5px;
-    padding:5px;
-    margin:5px 10px 10px 5px;
-    text-align:center;
+    border-radius:75px;
+    width: 150px;
+    height: 150px;
+    padding: 22px 0px 0px 0px;
+    margin: 5px 10px 10px 5px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .eval-box p {
     font-family:'Rufina', serif;
     color:#ffd821;
-    font-size:2.8em;
+    font-size:3em;
+    margin:0px;
+    line-height:normal;
 }
 
 .eval-box span {
     color:white;
 }
 
+.eval-box-name {
+    font-weight:bold;
+    font-size:1.3em;
+    font-family:Helvetica, sans-serif;
+}
+
 .tab-pane {
     margin-left: 20px;
 }
 
+.result-entry {
+    background-color:rgba(0,0,0,0.04);
+    border-radius:6px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2), inset 0px -3px 24px -1px rgba(0,0,0,0.1) ;
+    padding:5px 0px 5px 0px;
+}
+
+
+.img-btn {
+    padding-top: 75%;
+    cursor:pointer;
+}

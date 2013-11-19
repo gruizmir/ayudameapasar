@@ -7,12 +7,12 @@
 {% block right_content %}
 <link href="/static/css/perfil.css" rel="stylesheet">
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#mi_panel">Mi panel</a></li>
-  <li><a href="#solicitudes">Mis solicitudes</a></li>
-  <li><a href="#evaluaciones">Evaluaciones pendientes</a></li>
-  {% if user.es_ayudante %}
-  <li><a href="#ayudantias">Mis ayudantías</a></li>
+  <li class="active"><a href="#mi_panel" data-toggle="tab">Mi panel</a></li>
+  {% if user.perfil.es_ayudante %}
+  <li><a href="#ayudantias" data-toggle="tab">Mis ayudantías</a></li>
   {% endif %}
+  <li><a href="#solicitudes" data-toggle="tab">Mis solicitudes</a></li>
+  <li><a href="#evaluaciones" data-toggle="tab">Evaluaciones pendientes</a></li>
 </ul>
 
 
@@ -20,25 +20,31 @@
   <!-- seccion "Mi panel" -->
   <div class="tab-pane fade in active" id="mi_panel">
     <div class="row">
-      <h3 class="bottom-spaced">{{user.get_full_name}}</h3>
-      <div class="col-md-3">
-        <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
-      </div>
-      <div class="col-md-6 userdata">
-        <p> {{user.email}}</p>
-        <p> {{user.perfil.fono|default:"Teléfono no disponible"}}</p>
-        <p> {{user.perfil.institucion}}</p>
-        <button id="edit-btn" class="btn btn-primary">Editar</button>
+      <div class="col-md-9">
+        <div class="row">
+          <h3 class="bottom-spaced">{{user.get_full_name}}</h3>
+          <div class="col-md-4">
+            <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
+          </div>
+          <div class="col-md-8 userdata">
+            <p> {{user.email}}</p>
+            <p> {{user.perfil.fono|default:"Teléfono no disponible"}}</p>
+            <p> {{user.perfil.institucion}}</p>
+            {% if request.user == user %}
+            <button id="edit-btn" class="btn btn-primary">Editar</button>
+            {% endif %}
+          </div>
+        </div>
       </div>
       <div class="col-md-3">
         <div class="eval-box">
-          <span>Nota como alumno</span>
+          <span class="eval-box-name">Alumno</span>
           <p>{{user.perfil.puntuacion|floatformat}}</p>
           <span>en {{user.perfil.eval_qty}} calificaciones</span>
         </div>
 
         <div class="eval-box">
-          <span>Nota como ayudante</span>
+          <span class="eval-box-name">Ayudante</span>
           <p>{{user.ayudante.puntuacion|floatformat}}</p>
           <span>en {{user.ayudante.eval_qty}} calificaciones</span>
         </div>
@@ -47,9 +53,134 @@
   </div>
   <!-- END seccion "Mi panel" -->
 
+  {% if request.user.perfil.es_ayudante %}
+  <!-- seccion "Mis ayudantias" -->
+  <div class="tab-pane fade" id="ayudantias">
+
+    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
+      <div class="row result-entry top-spaced">
+        <div class="col-sm-7">
+            <h4>Ayudantia 1</h4>
+            <p>una ayudantia super cachilupi de un ramo random por ahi</p>
+            <span><strong>Categoría:</strong> Matematicas - Cálculo en varias variables</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Publicar/Despublicar -->
+          <img class="img-btn" src="/static/img/unpublish.png">
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
+    
+  {% if ayudantias %}
+    <button id="nueva-oferta" class="btn btn-primary">Nueva oferta</button>
+    {% for ayudantia in ayudantias %}
+      <div class="row result-entry">
+        <div class="col-sm-7">
+            <h4>{{ayudantia.titulo}}</h4>
+            <p>{{ayudantia.descripcion|truncatechars:100}}</p>
+            <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Publicar/Despublicar -->
+          {% if ayudantia.estado == "publicado" %}
+          <img class="img-btn" src="/static/img/unpublish.png">
+          {% else %}
+          <img class="img-btn" src="/static/img/publish.png">
+          {% endif %}
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info top-spaced"><strong>Aún no tienes ayudantías.</strong> Ingresa una nueva oferta.</div>
+    <button id="nueva-oferta" class="btn btn-primary">Nueva oferta</button>
+  {% endif%}
+  </div>
+  <!-- END seccion "Mis ayudantias" -->
+  {% endif %}
+  
   <!-- seccion "Mis solicitudes" -->
   <div class="tab-pane fade" id="solicitudes">
 
+    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
+      <div class="row result-entry top-spaced">
+        <div class="col-sm-7">
+            <h4>Ayudantia 1</h4>
+            <p>una ayudantia super cachilupi de un ramo random por ahi</p>
+            <span><strong>Ayudante:</strong> Juan Pérez</span><br>
+            <span><strong>Categoría:</strong> Matematicas - Cálculo en varias variables</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Publicar/Despublicar -->
+          <img class="img-btn" src="/static/img/unpublish.png">
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
+      
+  {% if solicitudes %}
+    <div class="row result-entry">
+        <div class="col-sm-7">
+            <h4>{{ayudantia.titulo}}</h4>
+            <p>{{ayudantia.descripcion|truncatechars:100}}</p>
+            <span><strong>Ayudante:</strong> {{ayudantia.ayudante}}</span>
+            <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Publicar/Despublicar -->
+          {% if ayudantia.estado == "publicado" %}
+          <img class="img-btn" src="/static/img/unpublish.png">
+          {% else %}
+          <img class="img-btn" src="/static/img/publish.png">
+          {% endif %}
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+  
+  {% else %}
+    <div class="alert alert-info top-spaced"><strong>No has realizado solicitudes de ayudantía.</strong> <a href="/busqueda">¿Deseas buscar una ayudantía ahora?</a></div>
+  {% endif %}
   </div>
   <!-- END seccion "Mis solicitudes" -->
 
@@ -57,15 +188,8 @@
   <div class="tab-pane fade" id="evaluaciones">
 
   </div>
-  <!-- END seccion "Mis solicitudes" -->
+  <!-- END seccion "Evaluaciones pendientes" -->
   
-  {% if request.user.es_ayudante %}
-  <!-- seccion "Mis ayudantias" -->
-  <div class="tab-pane fade" id="ayudantias">
-    
-  </div>
-  <!-- END seccion "Mis solicitudes" -->
-  {% endif %}
 </div>
 
 {% endblock %}

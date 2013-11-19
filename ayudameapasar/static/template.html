@@ -14,11 +14,14 @@
       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
       <script type="text/javascript" src="/static/js/bootstrap.js"></script>
       <script type="text/javascript" src="/static/js/template.js"></script>
+      <script type="text/javascript" src="/static/js/spin.js"></script>
       <link href='http://fonts.googleapis.com/css?family=Rufina:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
       <link href="/static/css/bootstrap.css" rel="stylesheet">
       <link href="/static/css/template.css" rel="stylesheet">
     </head>
     <body>
+      <div id="fader"></div>
+      <div id="spinner-div"></div>
         {% block header %}
           <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="navbar-header">
@@ -70,11 +73,11 @@
                   <ul class="dropdown-menu">
                     <li><a href="/cuentas/perfil">Mis datos</a></li>
                     {% if request.user.es_ayudante %}
-                    <li><a href="/ayudantias">Mis ayudantías</a></li>
+                    <li><a href="/cuentas/perfil/#ayudantias">Mis ayudantías</a></li>
                     {% endif %}
-                    <li><a href="/solicitudes">Mis solicitudes</a></li>
+                    <li><a href="/cuentas/perfil/#solicitudes">Mis solicitudes</a></li>
                     <li class="divider"></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/cuentas/logout">Logout</a></li>
                   </ul>
                 </li>
 
