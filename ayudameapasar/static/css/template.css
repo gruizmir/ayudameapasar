@@ -108,3 +108,27 @@ body {
     z-index: 200;
     display:none;
 }
+
+.action-block {
+    width:100%;
+    margin-top:10px;
+    background-color:#5e75ff;
+    border-radius:5px;
+    padding:10px 0px 10px 0px;;
+    color:white;
+    font-weight:bold;
+    text-align:center;
+    box-shadow: inset 0px -1px 3px 1px rgba(255,255,255,0.5);
+    cursor:pointer;
+}
+
+.action-block:hover {
+    box-shadow: inset 0px 1px 3px 1px rgba(255,255,255,0.5);
+}
+
+.filter-block {
+    border-top:1px solid white;
+    width:100%;
+    margin-top:5px;
+    margin-bottom:5px;
+}
