@@ -96,23 +96,36 @@
             <div id="left-content" class="col-md-3">
               {% block left_content %}
                 <h3>Acciones frecuentes</h3>
-                <div class="action-block">
-                  Ingresar nueva ayudantía
+                <div class="action-block clickable">
+                  <div class="filter-title">Ingresar nueva ayudantía</div>
                 </div>
+                
+                <h4>Buscar ayudantía</h4>
                 <div class="action-block">
-                  Buscar ayudantía
-                  
                   <div class="filter-block">
-                    <span class="glyphicon glyphicon-chevron-down"></span> Categorías
+                    <div class="filter-title clickable" onClick="showList(this, 'category_list')"><span class="glyphicon glyphicon-chevron-down"></span> Categorías</div>
+                    <div id="category_list" class="filter-list">
+                      <ul>
+                      {% for cat in cat_list %}
+                        <li onClick="catSelect(this)">{{cat}}</li>
+                      {% endfor %}
+                      </ul>
+                    </div>
                   </div>
                   
                   <div class="filter-block">
-                    <span class="glyphicon glyphicon-chevron-down"></span> Otros filtros
+                    <div class="filter-title clickable" onClick="showList(this, 'price_list')"><span class="glyphicon glyphicon-chevron-down"></span> Precio por hora</div>
+                    <div id="price_list" class="filter-list">
+                      <input type="checkbox" onClick="priceSelect(5000)"> 0 - 5000 <br />
+                      <input type="checkbox" onClick="priceSelect(10000)"> 5001 - 10000 <br />
+                      <input type="checkbox" onClick="priceSelect(15000)"> 10001 - 15000 <br />
+                      <input type="checkbox" onClick="priceSelect(20000)"> más de 15000  <br />
+                    </div>
                   </div>
                   
                 </div>
-                <div class="action-block">
-                  ¿Falta una categoría? ¡Mandanos tu sugerencia!
+                <div class="action-block clickable">
+                  <div class="filter-title">¿Falta una categoría? ¡Mandanos tu sugerencia!</div>
                 </div>
               {% endblock %}
             </div>

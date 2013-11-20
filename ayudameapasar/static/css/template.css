@@ -8,10 +8,19 @@ body {
     margin-right:auto;
     margin-top:20px;
     margin-bottom:30px;
+    min-height:491px;
+}
+
+.tab-content {
+    min-height: 491px;
 }
 
 #left-content {
     height:100%;
+}
+
+.clickable {
+    cursor:pointer;
 }
 
 #right-content {
@@ -114,12 +123,11 @@ body {
     margin-top:10px;
     background-color:#5e75ff;
     border-radius:5px;
-    padding:10px 0px 10px 0px;;
+    padding:10px 0px 10px 0px;
     color:white;
     font-weight:bold;
-    text-align:center;
+    text-align:left;
     box-shadow: inset 0px -1px 3px 1px rgba(255,255,255,0.5);
-    cursor:pointer;
 }
 
 .action-block:hover {
@@ -127,8 +135,21 @@ body {
 }
 
 .filter-block {
+    width:100%;
+    margin-top:5px;
+    margin-bottom:5px;
+}
+
+.filter-title {
+    padding-left:10px;
+}
+
+.filter-list {
     border-top:1px solid white;
     width:100%;
     margin-top:5px;
     margin-bottom:5px;
+    background-color:#5766BD;
+    padding-left:25px;
+    display:none;
 }

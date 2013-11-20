@@ -191,3 +191,7 @@ EMAIL_USE_TLS = True
 
 WEB_URL = "http://localhost:8000"
 #WEB_URL = "http://ayudameapasar.cl"
+
+LOGIN_URL =  "/cuentas/login"
+REGISTER_URL =  "/cuentas/registro"
+LOGOUT_URL =  "/cuentas/logout"
