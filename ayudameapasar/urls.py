@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^chaining/', include('smart_selects.urls')),
     url(r'^cuentas/', include('usuarios.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('main.urls')),
 )+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

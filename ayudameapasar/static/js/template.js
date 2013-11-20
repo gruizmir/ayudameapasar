@@ -1,5 +1,10 @@
-function showList(obj, ident){
-    val = "#" + ident;
-    obj = "#" + obj;
-    $(val).toggle(500);
+function showList(from, target){
+	
+	if(!$(from).hasClass("open")){
+		$(from).addClass('open');
+	}else{
+		$(from).removeClass('open');
+	}
+
+    $('#' + target).toggle('fast');
 }
