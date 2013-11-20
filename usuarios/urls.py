@@ -7,4 +7,6 @@ urlpatterns = patterns('usuarios.views',
     url(r'^login', 'loginView'),
     url(r'^logout', 'logoutView'),
     url(r'^registro', 'registerView'),
+    url(r'^edit', 'edit'),
+    url(r'^get_edit', 'getEditForm'),
 )

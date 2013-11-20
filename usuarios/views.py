@@ -11,9 +11,10 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, Suspici
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils import simplejson
 from main.models import Institucion
 from usuarios.models import Perfil, Ayudante, UsuarioPorConfirmar, InfoAcademica
-from usuarios.forms import RegisterForm, LoginForm
+from usuarios.forms import *
 import uuid
 
 
@@ -134,3 +135,66 @@ def mostrarPerfil(request, idUser):
         except ObjectDoesNotExist:
             pass
     return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))
+
+
+@login_required
+def edit(request):
+    if request.is_ajax():
+        form = EditUserForm(request.POST)
+        
+        if form.is_valid():
+            try:
+                ub = User.objects.get(email=form.cleaned_data['email'])
+                if ub is not request.user:
+                    exist=True
+                else:
+                    exist=False
+            except:
+                exist=False
+                
+            user = request.user
+            user.first_name = form.cleaned_data['nombre']
+            user.last_name = form.cleaned_data['apellido']
+            perfil = user.perfil
+            perfil.institucion = form.cleaned_data['institucion']
+            if not exist:
+                user.email = form.cleaned_data['email']
+            perfil.fono = form.cleaned_data['fono']
+            perfil.save()
+            user.save()
+            data = {}
+            data['user'] = user
+            rend = render_to_response("seccion_perfil.html", data, context_instance=RequestContext(request))
+            message = {"response":"OK", "result": rend.content}
+            json = simplejson.dumps(message)
+            return HttpResponse(json, mimetype='application/json')
+        else:
+            data = {}
+            data['user'] = request.user
+            data['form'] = form
+            rend = render_to_response("edit_perfil.html", data, context_instance=RequestContext(request))
+            message = {"response":"ERROR", "result": rend.content}
+            json = simplejson.dumps(message)
+            return HttpResponse(json, mimetype='application/json')
+    else:
+        raise SuspiciousOperation
+
+@login_required
+def getEditForm(request):
+    if request.is_ajax():
+        user = request.user
+        initial_data = {'nombre':user.first_name,
+                        'apellido':user.last_name,
+                        'institucion':user.perfil.institucion,
+                        'email':user.email,
+                        'fono':user.perfil.fono
+                         }
+        data = {}
+        data['user'] = request.user
+        data['form'] = EditUserForm(initial=initial_data)
+        rend = render_to_response("edit_perfil.html", data, context_instance=RequestContext(request))
+        message = {"response":"OK", "result": rend.content}
+        json = simplejson.dumps(message)
+        return HttpResponse(json, mimetype='application/json')
+    else:
+        raise SuspiciousOperation

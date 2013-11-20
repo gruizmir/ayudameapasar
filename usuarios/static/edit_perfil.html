@@ -1,0 +1,26 @@
+<div class="row">
+  {% if form %}
+  <form id="user-data-form" method="POST" class="form" action="/cuentas/edit/">
+    {% csrf_token %}
+    <div class="col-md-6">
+      {{form.nombre}}
+    </div>
+    <div class="col-md-6">
+      {{form.apellido}}
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
+        {{form.avatar}}
+      </div>
+      <div class="col-md-8 userdata">
+        <p> {{form.email}}</p>
+        <p> {{form.fono}}</p>
+        <p> {{form.institucion}}</p>
+        <button type="submit" onClick="submitUserForm()" id="edit-btn" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </form>
+  {% endif %}
+</div>

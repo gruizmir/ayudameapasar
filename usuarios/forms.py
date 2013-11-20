@@ -40,10 +40,8 @@ class RegisterForm(Form):
     def clean_email(self):
         email = self.cleaned_data["email"]
         extension = email.split("@")[1]
-        print extension
         try:
             inst = self.cleaned_data['institucion']
-            print inst
             if not EmailValidos.objects.filter(institucion=inst).filter(dominio=extension).exists():
                 print "no existe"
                 raise ValidationError(self.error_messages['invalid_extension'])
@@ -109,3 +107,38 @@ class LoginForm(Form):
 
     def get_user(self):
         return self.user_cache
+
+
+
+class EditUserForm(Form):
+    error_messages = {
+        'duplicate_email': "Email ya registrado",
+        'password_mismatch': "Contraseñas no coinciden",
+        'invalid_extension': "No es un email institucional registrado",
+    }
+    nombre = CharField(required=True, label="Nombre", 
+            widget=TextInput(attrs={'class':'form-control bottom-spaced top-spaced', 'placeholder':'Nombre'}))
+    apellido = CharField(required=True, label="Apellido(s)",
+            widget=TextInput(attrs={'class':'form-control bottom-spaced top-spaced', 'placeholder':'Apellido'}))
+    institucion = ModelChoiceField(required=True,
+        queryset=Institucion.objects.all(),
+        initial=0,
+        help_text="Por el momento, sólo disponible para usuarios de la UTFSM",
+        widget=Select(attrs={'class':'form-control'})
+    )
+    email = EmailField(required=True, help_text="Debe ser tu email institucional",
+            widget=TextInput(attrs={'class':'form-control', 'placeholder':'Email'}))
+    fono = CharField(required=True, label="Fono",
+            widget=TextInput(attrs={'class':'form-control', 'placeholder':'Fono'}))
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        extension = email.split("@")[1]
+        try:
+            inst = self.cleaned_data['institucion']
+            if not EmailValidos.objects.filter(institucion=inst).filter(dominio=extension).exists():
+                raise ValidationError(self.error_messages['invalid_extension'])
+            else:
+                return email
+        except:
+            raise ValidationError(self.error_messages['invalid_extension'])
