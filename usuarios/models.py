@@ -18,6 +18,14 @@ class Perfil(models.Model):
         
     def __unicode__(self):
         return self.usuario.get_full_name()
+
+    def crear_ayudante(self):
+        if self.es_ayudante:
+            return self.ayudante
+        else:
+            ayudante = Ayudante(usuario=self)
+            ayudante.save()
+            return ayudante
     
 User.perfil = property(lambda u: Perfil.objects.get_or_create(usuario=u)[0])
 

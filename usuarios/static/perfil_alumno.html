@@ -25,7 +25,7 @@
         <div class="row">
           <h3 class="bottom-spaced">{{user.get_full_name}}</h3>
           <div class="col-md-4">
-            <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
+            <img class="profile_img" src="/media/{{user.perfil.avatar}}" alt="{{user.get_full_name}}">
           </div>
           <div class="col-md-8 userdata">
             <p> {{user.email}}</p>
@@ -112,6 +112,7 @@
           <img class="img-btn" src="/static/img/delete.png">
         </div>
       </div>
+      {% empty %}
     {% endfor %}
   {% else %}
     <div class="alert alert-info top-spaced"><strong>Aún no tienes ayudantías.</strong> Ingresa una nueva oferta.</div>
@@ -120,6 +121,9 @@
   </div>
   <!-- END seccion "Mis ayudantias" -->
   {% endif %}
+
+
+
   
   <!-- seccion "Mis solicitudes" -->
   <div class="tab-pane fade" id="solicitudes">
@@ -151,21 +155,22 @@
       <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
       
   {% if solicitudes %}
-    <div class="row result-entry">
+    {% for solicitud in solicitudes %}
+      <div class="row result-entry">
         <div class="col-sm-7">
-            <h4>{{ayudantia.titulo}}</h4>
-            <p>{{ayudantia.descripcion|truncatechars:100}}</p>
-            <span><strong>Ayudante:</strong> {{ayudantia.ayudante}}</span>
-            <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
+            <h4>{{solicitud.titulo}}</h4>
+            <p>{{solicitud.descripcion|truncatechars:100}}</p>
+            <span><strong>Alumno:</strong> {{solicitud.ayudante}}</span>
+            <span><strong>Categoría:</strong> {{solicitud.categoria}} - {{solicitud.subcategoria}}</span><br>
         </div>
         <div class="col-sm-1"><!-- Editar -->
           <img class="img-btn" src="/static/img/edit.png">
         </div>
         <div class="col-sm-1"><!-- Publicar/Despublicar -->
-          {% if ayudantia.estado == "publicado" %}
-          <img class="img-btn" src="/static/img/unpublish.png">
+          {% if solicitud.aceptada %}
+            <img class="img-btn" src="/static/img/unpublish.png">
           {% else %}
-          <img class="img-btn" src="/static/img/publish.png">
+            <img class="img-btn" src="/static/img/publish.png">
           {% endif %}
         </div>
         <div class="col-sm-1"><!-- Ver más -->
@@ -178,19 +183,73 @@
           <img class="img-btn" src="/static/img/delete.png">
         </div>
       </div>
-  
+    {% endfor %}
   {% else %}
     <div class="alert alert-info top-spaced"><strong>No has realizado solicitudes de ayudantía.</strong> <a href="/busqueda">¿Deseas buscar una ayudantía ahora?</a></div>
   {% endif %}
   </div>
   <!-- END seccion "Mis solicitudes" -->
 
+
+
+
+
   <!-- seccion "Evaluaciones pendientes" -->
   <div class="tab-pane fade" id="evaluaciones">
-
+    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
+      <div class="row result-entry top-spaced">
+        <div class="col-sm-7">
+            <h4>Ayudantia 1</h4>
+            <p>una ayudantia super cachilupi de un ramo random por ahi</p>
+            <span><strong>Alumno:</strong> Juan Pérez</span><br>
+            <span><strong>Categoría:</strong> Matematicas - Cálculo en varias variables</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Publicar/Despublicar -->
+          <img class="img-btn" src="/static/img/unpublish.png">
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
+      
+  {% if evaluaciones %}
+    {% for evaluacion in evaluaciones %}
+      <div class="row result-entry">
+        <div class="col-sm-8">
+            <h4>{{evaluacion.titulo}}</h4>
+            <p>{{evaluacion.descripcion|truncatechars:100}}</p>
+            <span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}}</span>
+            <span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
+        </div>
+        <div class="col-sm-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png">
+        </div>
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png">
+        </div>
+        <div class="col-sm-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png">
+        </div>
+        <div class="col-sm-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png">
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info top-spaced"><strong>No tienes alumnos por evaluar.</strong> <a href="/busqueda"></a></div>
+  {% endif %}
   </div>
   <!-- END seccion "Evaluaciones pendientes" -->
-  
 </div>
 
 {% endblock %}

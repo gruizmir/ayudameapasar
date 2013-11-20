@@ -130,7 +130,7 @@ class EditUserForm(Form):
             widget=TextInput(attrs={'class':'form-control', 'placeholder':'Email'}))
     fono = CharField(required=True, label="Fono",
             widget=TextInput(attrs={'class':'form-control', 'placeholder':'Fono'}))
-
+    avatar = ImageField(required=False)
     def clean_email(self):
         email = self.cleaned_data["email"]
         extension = email.split("@")[1]

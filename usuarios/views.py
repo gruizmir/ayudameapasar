@@ -157,6 +157,8 @@ def edit(request):
             user.last_name = form.cleaned_data['apellido']
             perfil = user.perfil
             perfil.institucion = form.cleaned_data['institucion']
+            if form.cleaned_data['institucion'] is not None:
+                perfil.avatar = form.cleaned_data['institucion']
             if not exist:
                 user.email = form.cleaned_data['email']
             perfil.fono = form.cleaned_data['fono']
@@ -186,6 +188,7 @@ def getEditForm(request):
         initial_data = {'nombre':user.first_name,
                         'apellido':user.last_name,
                         'institucion':user.perfil.institucion,
+                        'avatar':user.perfil.avatar,
                         'email':user.email,
                         'fono':user.perfil.fono
                          }
