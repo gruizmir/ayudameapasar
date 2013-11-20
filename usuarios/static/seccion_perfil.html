@@ -1,0 +1,14 @@
+<div class="row">
+  <h3 class="bottom-spaced">{{user.get_full_name}}</h3>
+  <div class="col-md-4">
+    <img class="profile_img" src="/media/{{user.avatar}}" alt="{{user.get_full_name}}">
+  </div>
+  <div class="col-md-8 userdata">
+    <p> {{user.email}}</p>
+    <p> {{user.perfil.fono|default:"Teléfono no disponible"}}</p>
+    <p> {{user.perfil.institucion}}</p>
+    {% if request.user == user %}
+    <button id="edit-btn" onClick="showEditForm()" class="btn btn-primary">Editar</button>
+    {% endif %}
+  </div>
+</div>
