@@ -13,6 +13,7 @@ from ayudantias.models import *
 from usuarios.models import Ayudante, Perfil
 from ayudantias.forms import *
 
+# muestra todas las ayudantias 
 def ayudantias(request):
 	data = {}
 	data['lista_ayudantias'] = Ayudantia.objects.all()
