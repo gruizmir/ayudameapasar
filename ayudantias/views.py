@@ -20,6 +20,26 @@ def ayudantias(request):
 	data['lista_ayudantias'] = Ayudantia.objects.all()
 	return render_to_response("ayudantias.html", data, context_instance=RequestContext(request))
 
+# trae solo las ayudantias del usuario
+@login_required
+def mis_ayudantias(request):
+	data = {}
+	data['lista_ayudantias'] = None
+
+	# obtiene el usuario
+	user = request.user
+
+	# determina si es ayudante
+	if user.perfil.es_ayudante:
+		try:
+			ayudante = Ayudante.objects.get(usuario=user)
+			data['lista_ayudantias'] = Ayudantia().GetAyudantiasAyudante(ayudante)
+		except ObjectDoesNotExist:
+			pass
+			#TO-DO
+
+	return render_to_response("mis_ayudantias.html", data, context_instance=RequestContext(request))
+
 
 @login_required
 def publicar_ayudantia(request):

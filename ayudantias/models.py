@@ -4,6 +4,7 @@ from django.db import models
 from usuarios.models import Ayudante
 from smart_selects.db_fields import ChainedForeignKey 
 from django.contrib.auth.models import User
+from datetime import date
 
 ESTADO = ['Publicada','Despublicada']
 
@@ -48,11 +49,11 @@ class Ayudantia(models.Model):
 
 	# Metodos
 	def GetAyudantias(self):
-		lista_ayudantias = Ayudantia.objects.all()
-		if lista_ayudantias:
-			return lista_ayudantias
-		else:
-			return None
+		fecha_actual = date.today()
+		return Ayudantia.objects.filter(fecha_termino__gte=fecha_actual, estado="1").order_by('-fecha_publicacion')
+
+	def GetAyudantiasAyudante(self, ayudante):
+		return Ayudantia.objects.filter(ayudante=ayudante).order_by('-fecha_publicacion', '-fecha_termino')
 
 class HorarioAyudantia(models.Model):
 	ayudantia = models.ForeignKey(Ayudantia)

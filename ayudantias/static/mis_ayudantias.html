@@ -8,9 +8,9 @@
 		<tr>
 			<th>Fecha de publicaci&oacute;n</th>
 			<th>Nombre</th>
-			<th>Ayudante</th>
 			<th>Categor&iacute;a</th>
 			<th>Subcategor&iacute;a</th>
+			<th>Estado</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
@@ -19,9 +19,9 @@
 		<tr>
 			<td>{{ ayudantia.fecha_publicacion|date:"d/m/Y" }}</td>
 			<td>{{ ayudantia.nombre }}</td>
-			<td>{{ ayudantia.ayudante.usuario.first_name }} {{ ayudantia.ayudante.usuario.last_name }}</td>
 			<td>{{ ayudantia.categoria.nombre }}</td>
 			<td>{{ ayudantia.subcategoria.nombre }}</td>
+			<td>{{ ayudantia.get_estado_display }}</td>
 			<td>TO-DO</td>
 		</tr>
 	{% empty %}
