@@ -23,7 +23,9 @@ class Perfil(models.Model):
         if self.es_ayudante:
             return self.ayudante
         else:
-            ayudante = Ayudante(usuario=self)
+            self.es_ayudante = True
+            self.save()
+            ayudante = Ayudante(usuario=self.usuario)
             ayudante.save()
             return ayudante
     

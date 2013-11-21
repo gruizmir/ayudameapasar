@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.forms import Form, ModelForm, BooleanField, ChoiceField, CharField, TextInput, BooleanField, ModelChoiceField, Select, CheckboxInput, ValidationError, Textarea, DateField, TimeField
+from django.forms import Form, ModelForm, ChoiceField, CharField, TextInput, ModelChoiceField, Select, ValidationError, Textarea, DateField, TimeField
 from ayudantias.models import *
 
 class publicarAyudantiaForm(ModelForm):
 	nombre = CharField(required=True, label="Nombre", widget=TextInput(attrs={'class':'form-control'}))
-	descripcion = CharField(required=True, label="Descripcion", widget=Textarea(attrs={'class':'form-control'}))
-	categoria = ModelChoiceField(required=True, 
+	descripcion = CharField(required=True, label="Descripción", widget=Textarea(attrs={'class':'form-control'}))
+	categoria = ModelChoiceField(required=True,
 		queryset=Categoria.objects.all(),
 		initial=0,
 		widget=Select(attrs={'class':'form-control'}))
@@ -23,8 +23,8 @@ class publicarAyudantiaForm(ModelForm):
 
 
 class horarioAyudantiaForm(ModelForm):
-	hora_inicio = TimeField(required=True, widget=TextInput(attrs={'class':'form-control'}))
-	hora_final = TimeField(required=True, widget=TextInput(attrs={'class':'form-control'}))
+	hora_inicio = TimeField(required=True, label="Hora de Inicio", widget=TextInput(attrs={'class':'form-control'}))
+	hora_final = TimeField(required=True, label="Hora de finalización", widget=TextInput(attrs={'class':'form-control'}))
 
 	DIAS = [("1", "Lunes"),
 		("2", "Martes"),
@@ -35,7 +35,7 @@ class horarioAyudantiaForm(ModelForm):
 		("7", "Domingo"),
 		]
 	
-	dia = ChoiceField(required=True, label="Dias", choices=DIAS, widget=Select(attrs={'class':'form-control'}))
+	dia = ChoiceField(required=True, label="Día", choices=DIAS, widget=Select(attrs={'class':'form-control'}))
 
 	class Meta:
 		model = HorarioAyudantia

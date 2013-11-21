@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, SuspiciousOperation
 from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib import messages
@@ -34,20 +35,27 @@ def publicar_ayudantia(request):
 
 			# extrae el usuario
 			# si es un ayudante
-			ayudante = Ayudante.objects.get(usuario=request.user)
-			if ayudante.ObjectDoesNotExist:
-				usuario = Perfil.objects.get(usuario=request.user)
-				ayudante = usuario.crear_ayudante()
+			user = request.user
+			print user.username
+			if user.perfil.es_ayudante:
+				try:
+					ayudante = Ayudante.objects.get(usuario=user)
+				except ObjectDoesNotExist:
+					messages.error(request, "Error al intentar obtener sus datos.")
+					data['ayudantiaForm'] = formulario_ayudantia
+					data['horarioForm'] = formulario_horario
+					return render_to_response("publicar_ayudantia.html", data, context_instance=RequestContext(request))
+			else:
+				ayudante = user.perfil.crear_ayudante()
 
 			# almacena el ayudante
 			ayudantia.ayudante = ayudante
 			ayudantia.save()
-
 			horario.ayudantia = ayudantia
 			horario.save()
 
 			messages.success(request, "Se ha agregado correctamente el aviso de ayudantía")
-			return HttpResponseRedirect(reverse('ayudantias.views.publicar_ayudantia'))
+			return HttpResponseRedirect("/ayudantias/")
 	else:
 		formulario_ayudantia = publicarAyudantiaForm()
 		formulario_horario = horarioAyudantiaForm()

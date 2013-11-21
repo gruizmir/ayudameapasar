@@ -141,9 +141,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'main',
     # Django-south
-    #~ 'south',
+    'south',
     'smart_selects',
-    'main',
     'usuarios',
     'ayudantias',
     'evaluaciones',
