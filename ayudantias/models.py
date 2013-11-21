@@ -43,6 +43,7 @@ class Ayudantia(models.Model):
 		null=True, 
 		blank=True
 	)
+	costo_por_hora = models.IntegerField()
 
 	def __unicode__(self):
 		return self.nombre

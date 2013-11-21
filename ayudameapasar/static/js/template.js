@@ -8,3 +8,12 @@ function showList(from, target){
 
     $('#' + target).toggle('fast');
 }
+
+/* --- ON READY JS --- */
+$(document).ready(function(){
+	// Estilos para money-field
+	$('.money-field').each(function(){
+		/* TODO MONEY CHANGE */
+	});
+
+});

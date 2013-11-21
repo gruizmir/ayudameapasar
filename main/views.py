@@ -20,5 +20,5 @@ import uuid
 def landing(request):
 	dict = {}
 
-	dict['hola'] = "hola"
+	dict['ayudantias'] = Ayudantia.objects.all().order_by('-id')[:10]
 	return render_to_response("landing.html", dict, context_instance=RequestContext(request))

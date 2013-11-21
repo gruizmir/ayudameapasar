@@ -32,10 +32,10 @@ function showEditForm(){
             response = data.response;
             if(response=="OK"){
                 result = data.result;
-                $("#user-data-div")[0].innerHTML =result;
+                $("#user-data-div").html(result);
             }
             else{
-                $("#user-data-div")[0].innerHTML = "<p>Error</p>";
+                $("#user-data-div").html("<p>Error</p>");
             }
         },
         error: function(data){

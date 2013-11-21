@@ -53,7 +53,7 @@ def registerView(request):
             user.save()
             perfil = user.perfil
             perfil.institucion = form.cleaned_data['institucion']
-            perfil.es_ayudante = form.cleaned_data['es_ayudante']
+            perfil.es_ayudante = False
             perfil.save()
             if user.perfil.es_ayudante:
                 ayudante = Ayudante(usuario=user)
@@ -114,7 +114,9 @@ def confirm(request, token=None):
 def mostrarPerfilPropio(request):
     user = request.user
     data = {}
-    data['user']=user
+    user.profile = Perfil.objects.get(usuario = user)
+    data['user'] = user
+
     if user.perfil.es_ayudante:
         try:
             data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)

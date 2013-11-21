@@ -4,7 +4,8 @@
 {% block main_top_content %}
 <div class="container">
   <div class="row">
-    <div class="col-lg-4 col-sm-offset-4 boxed bottom-spaced">
+    <div class="col-lg-2 col-lg-offset-2"><img src="/static/img/logoayudame.png" alt="" /></div>
+    <div class="col-lg-4 boxed bottom-spaced">
       {% if form %}
       <form class="form" method="POST" action="/cuentas/registro/">
         {% csrf_token %}

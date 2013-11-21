@@ -9,14 +9,49 @@
 
 
 <div class="tab-content">
-  <!-- seccion "Mi panel" -->
   <div class="tab-pane fade in active" id="mi_panel">
     <div class="row">
-    	<h1>Últimas ayudantias</h1>
+    	<h1>Últimas 10 ayudantias</h1>
     	<hr noshade="noshade" />
     </div>
   </div>
-  <!-- END seccion "Mi panel" -->
+  
+
+  {% if ayudantias %}
+    {% for ayudantia in ayudantias %}
+      <div class="row boxed ayudantia-box">
+        <div class="col-md-7">
+            <h4>{{ayudantia.titulo}}</h4>
+            <p>{{ayudantia.descripcion|truncatechars:100}}</p>
+            <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
+        </div>
+        <div class="col-lg-1"><!-- Editar -->
+          <img class="img-btn" src="/static/img/edit.png" alt="" width="60px">
+        </div>
+        <div class="col-lg-1"><!-- Publicar/Despublicar -->
+          {% if ayudantia.estado == "publicado" %}
+          <img class="img-btn" src="/static/img/unpublish.png" alt="" width="60px">
+          {% else %}
+          <img class="img-btn" src="/static/img/publish.png" alt="" width="60px">
+          {% endif %}
+        </div>
+        <div class="col-lg-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png" alt="" width="60px">
+        </div>
+        <div class="col-lg-1"><!-- Solicitudes/Historial -->
+          <img class="img-btn" src="/static/img/requests.png" alt="" width="60px">
+        </div>
+        <div class="col-lg-1"><!-- Eliminar -->
+          <img class="img-btn" src="/static/img/delete.png" alt="" width="60px">
+        </div>
+      </div>
+      {% empty %}
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info top-spaced">
+    	<strong>Ayudameapasar.cl.</strong> Está triste :( no hay ninguna ayudantia! Anda a tu perfil y agrega una!
+    </div>
+  {% endif%}
   
 </div>
 

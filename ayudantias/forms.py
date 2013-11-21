@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.forms import Form, ModelForm, ChoiceField, CharField, TextInput, ModelChoiceField, Select, ValidationError, Textarea, DateField, TimeField
+from django.forms import Form, ModelForm, ChoiceField, CharField, TextInput, ModelChoiceField, Select, ValidationError, Textarea, DateField, TimeField, IntegerField
 from ayudantias.models import *
 
 class publicarAyudantiaForm(ModelForm):
@@ -8,13 +8,15 @@ class publicarAyudantiaForm(ModelForm):
 	categoria = ModelChoiceField(required=True,
 		queryset=Categoria.objects.all(),
 		initial=0,
-		widget=Select(attrs={'class':'form-control'}))
+		widget=Select(attrs={'class':'form-control'}),
+		empty_label="-------------")
 
 	subcategoria = ModelChoiceField(required=True, 
 		queryset=Subcategoria.objects.all(),
 		initial=0,
-		widget=Select(attrs={'class':'form-control'}))
-
+		widget=Select(attrs={'class':'form-control'}),
+		empty_label="-------------")
+	costo_por_hora = IntegerField(widget=TextInput(attrs={'class':'form-control money-field'}))
 	fecha_termino = DateField(widget=TextInput(attrs={'class':'form-control'}))
 
 	class Meta:

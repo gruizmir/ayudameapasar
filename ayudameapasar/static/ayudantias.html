@@ -1,9 +1,10 @@
 {% extends "template.html" %}
 
 {% load bootstrap_toolkit %}
-{% block main_top_content %}
 
-<table>
+{% block right_content %}
+<h1>Ayudantias</h1>
+<table class="table">
 	<thead>
 		<tr>
 			<th>Fecha de publicaci&oacute;n</th>
@@ -29,11 +30,4 @@
 	{% endfor %}
 	</tbody>
 </table>
-
-{% endblock %}
-
-{% block left_content %}
-{% endblock %}
-
-{% block right_content %}
 {% endblock %}

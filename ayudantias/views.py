@@ -56,7 +56,7 @@ def publicar_ayudantia(request):
 			# extrae el usuario
 			# si es un ayudante
 			user = request.user
-			print user.username
+			
 			if user.perfil.es_ayudante:
 				try:
 					ayudante = Ayudante.objects.get(usuario=user)
@@ -76,6 +76,8 @@ def publicar_ayudantia(request):
 
 			messages.success(request, "Se ha agregado correctamente el aviso de ayudantía")
 			return HttpResponseRedirect("/ayudantias/")
+		else:
+			messages.error(request, "Error al ingresar ayudantia, revise bien los campos!")
 	else:
 		formulario_ayudantia = publicarAyudantiaForm()
 		formulario_horario = horarioAyudantiaForm()

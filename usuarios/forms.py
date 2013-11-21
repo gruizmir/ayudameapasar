@@ -35,7 +35,6 @@ class RegisterForm(Form):
         max_length=MAXIMUM_PASSWORD_LENGTH,
         widget=PasswordInput(attrs={'class':'form-control'})
     )
-    es_ayudante = BooleanField(required=False, label="¿Eres ayudante?")
 
     def clean_email(self):
         email = self.cleaned_data["email"]
