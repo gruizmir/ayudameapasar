@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+
+{% load bootstrap_toolkit %}
+{% block main_top_content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4 col-sm-offset-4 boxed bottom-spaced">
+      {% if ayudantiaForm and horarioForm %}
+      <form class="form" method="POST" action="/ayudantias/publicar_ayudantia/">
+        {% csrf_token %}
+        <h2>Ayudant&iacute;a</h2>
+        {{ ayudantiaForm|as_bootstrap }}
+        <h2>Horario</h2>
+        {{ horarioForm|as_bootstrap }}
+        <button type="submit" class="btn btn-primary righted">Publicar</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+
+{% block right_content %}
+{% endblock %}

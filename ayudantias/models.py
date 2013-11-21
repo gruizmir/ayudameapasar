@@ -8,55 +8,78 @@ from django.contrib.auth.models import User
 ESTADO = ['Publicada','Despublicada']
 
 class Categoria(models.Model):
-    nombre = models.CharField(max_length=50L, verbose_name="Categoría")
-    
-    def __unicode__(self):
-        return self.nombre
-        
+	nombre = models.CharField(max_length=50L, verbose_name="Categoría")
+	
+	def __unicode__(self):
+		return self.nombre
+		
 class Subcategoria(models.Model):
-    nombre = models.CharField(max_length=50L, verbose_name="Categoría")
-    categoria = models.ForeignKey(Categoria)
-    
-    def __unicode__(self):
-        return self.nombre
+	nombre = models.CharField(max_length=50L, verbose_name="Categoría")
+	categoria = models.ForeignKey(Categoria)
+	
+	def __unicode__(self):
+		return self.nombre
 
 class Ayudantia(models.Model):
-    ayudante = models.ForeignKey(Ayudante)
-    nombre = models.CharField(max_length=50L, verbose_name="Nombre del ramo")
-    descripcion = models.TextField()
-    estado = models.IntegerField(default=0)
-    categoria = models.ForeignKey(Categoria, null=True, blank=True)
-    subcategoria = ChainedForeignKey(
-        Subcategoria, 
-        chained_field="categoria",
-        chained_model_field="categoria", 
-        show_all=False, 
-        auto_choose=True,
-        null=True, 
-        blank=True
-    )
+	ayudante = models.ForeignKey(Ayudante)
+	nombre = models.CharField(max_length=50L, verbose_name="Nombre del ramo")
+	descripcion = models.TextField()
+	ESTADOS = (
+			 ("1", "Publicado"),
+			 ("2", "Despublicado"),
+			 ("3", "Baneado")
+			)
+	estado = models.CharField(max_length=1, choices=ESTADOS, default="1")
+	fecha_publicacion = models.DateTimeField(auto_now_add=True)
+	fecha_termino = models.DateTimeField()
+	categoria = models.ForeignKey(Categoria, null=True, blank=True)
+	subcategoria = ChainedForeignKey(
+		Subcategoria, 
+		chained_field="categoria",
+		chained_model_field="categoria", 
+		show_all=False, 
+		auto_choose=True,
+		null=True, 
+		blank=True
+	)
 
-    def __unicode__(self):
-        return self.nombre
+	def __unicode__(self):
+		return self.nombre
+
+	# Metodos
+	def GetAyudantias(self):
+		lista_ayudantias = Ayudantia.objects.all()
+		if lista_ayudantias:
+			return lista_ayudantias
+		else:
+			return None
 
 class HorarioAyudantia(models.Model):
-    ayudantia = models.ForeignKey(Ayudantia)
-    hora_inicio = models.TimeField(verbose_name="Hora de inicio")
-    hora_final = models.TimeField(verbose_name="Hora de finalización")
-    dia = models.IntegerField(default=1)
-    activo = models.BooleanField(default=True)
+	ayudantia = models.ForeignKey(Ayudantia)
+	hora_inicio = models.TimeField(verbose_name="Hora de inicio")
+	hora_final = models.TimeField(verbose_name="Hora de finalización")
+	DIAS = (("1", "Lunes"),
+		("2", "Martes"),
+		("3", "Miercoles"),
+		("4", "Jueves"),
+		("5", "Viernes"),
+		("6", "Sábado"),
+		("7", "Domingo"),
+		)
+	dia = models.CharField(max_length=1, choices=DIAS, default="1")
+	activo = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return self.ayudantia.nombre
-    
+	def __unicode__(self):
+		return self.ayudantia.nombre
+	
 class AlumnoAyudantia(models.Model):
-    alumno = models.ForeignKey(User)
-    ayudantia = models.ForeignKey(Ayudantia)
-    horario = models.ForeignKey(HorarioAyudantia)
-    asistio = models.BooleanField(default=False)
-    aceptada = models.BooleanField(default=False)
-    fecha_solicitud = models.DateTimeField(auto_now_add=True)
-    cantidad_personas = models.IntegerField(default=1, verbose_name="Cantidad de asistentes")
-    
-    def __unicode__(self):
-        return self.alumno.get_full_name()
+	alumno = models.ForeignKey(User)
+	ayudantia = models.ForeignKey(Ayudantia)
+	horario = models.ForeignKey(HorarioAyudantia)
+	asistio = models.BooleanField(default=False)
+	aceptada = models.BooleanField(default=False)
+	fecha_solicitud = models.DateTimeField(auto_now_add=True)
+	cantidad_personas = models.IntegerField(default=1, verbose_name="Cantidad de asistentes")
+	
+	def __unicode__(self):
+		return self.alumno.get_full_name()
