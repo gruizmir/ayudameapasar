@@ -7,6 +7,18 @@
 {% block right_content %}
 <link href="/static/css/perfil.css" rel="stylesheet">
 <script type="text/javascript" src="/static/js/perfil.js"></script>
+<script>
+$(function() {
+    $( "#evalDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:600
+    });
+});
+</script>
+
+
+
 <ul class="nav nav-tabs">
   <li class="active"><a href="#mi_panel" data-toggle="tab">Mi panel</a></li>
   <li><a href="#ayudantias" data-toggle="tab">Mis ayudantías</a></li>
@@ -179,43 +191,17 @@
 
   <!-- seccion "Evaluaciones pendientes" -->
   <div class="tab-pane fade" id="evaluaciones">
-    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
-      <div class="row result-entry top-spaced">
-        <div class="col-sm-7">
-            <h4>Ayudantia 1</h4>
-            <p>una ayudantia super cachilupi de un ramo random por ahi</p>
-            <span><strong>Alumno:</strong> Juan Pérez</span><br>
-            <span><strong>Categoría:</strong> Matematicas - Cálculo en varias variables</span><br>
-        </div>
-        <div class="col-sm-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png">
-        </div>
-        <div class="col-sm-1"><!-- Publicar/Despublicar -->
-          <img class="img-btn" src="/static/img/unpublish.png">
-        </div>
-        <div class="col-sm-1"><!-- Ver más -->
-          <img class="img-btn" src="/static/img/more.png">
-        </div>
-        <div class="col-sm-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png">
-        </div>
-        <div class="col-sm-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png">
-        </div>
-      </div>
-      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
-      
   {% if evaluaciones %}
     {% for evaluacion in evaluaciones %}
       <div class="row result-entry">
         <div class="col-sm-8">
             <h4>{{evaluacion.titulo}}</h4>
             <p>{{evaluacion.descripcion|truncatechars:100}}</p>
-            <span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}}</span>
+            <span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}} (<a onClick="denunciar('alumno', {{evaluacion.ayudante.usuario.id}})">Denunciar</a>)</span>
             <span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
         </div>
         <div class="col-sm-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png">
+          <img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})">
         </div>
         <div class="col-sm-1"><!-- Ver más -->
           <img class="img-btn" src="/static/img/more.png">
@@ -235,4 +221,8 @@
   <!-- END seccion "Evaluaciones pendientes" -->
 </div>
 
+
+<div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia">
+    
+</div>
 {% endblock %}

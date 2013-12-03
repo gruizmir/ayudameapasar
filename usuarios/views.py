@@ -99,7 +99,7 @@ def confirm(request, token=None):
             try:
                 user = User.objects.get(email=request.GET['email'])
                 if user.is_active == False:
-                    confirmar = UsuarioPorConfirmar(usuario=user)
+                    confirmar = UsuarioPorConfirmar.objects.get(usuario=user)
                     if confirmar.token == token:
                         user.is_active=True
                         user.save()
