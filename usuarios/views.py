@@ -13,7 +13,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import simplejson
 from main.models import Institucion
-from usuarios.models import Perfil, Ayudante, UsuarioPorConfirmar, InfoAcademica
+from usuarios.models import *
 from usuarios.forms import *
 import uuid
 
@@ -58,7 +58,7 @@ def registerView(request):
             if user.perfil.es_ayudante:
                 ayudante = Ayudante(usuario=user)
                 ayudante.save()
-            #~ sendConfirmationEmail(user)
+            sendConfirmationEmail(user)
             return HttpResponseRedirect("/")
         else:
             return render_to_response("register.html", {'form':form}, context_instance=RequestContext(request))
@@ -75,9 +75,10 @@ def logoutView(request):
 def sendConfirmationEmail(user):
     connection = mail.get_connection()
     connection.open()
-    confReg = UsuarioPorConfirmar(usuario=user, token = uuid.uuid1().hex)
-    confRef.save()
-    msg = user.get_full_name() + u", welcome to Ayudame a Pasar!\n\n"
+    token = uuid.uuid1().hex
+    confReg = UsuarioPorConfirmar(usuario=user, token=token)
+    confReg.save()
+    msg = user.get_full_name() + u", Bienvenido a Ayudame a Pasar!\n\n"
     msg = msg + u"Confirma tu dirección haciendo click en el siguiente link: \n\n"
     msgCustom = msg + settings.WEB_URL + u"/cuentas/confirmar/" + token + "?email=" + user.email
     subject = "Confirma tu registro en AyudameaPasar.cl"
