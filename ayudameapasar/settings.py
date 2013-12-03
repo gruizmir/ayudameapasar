@@ -183,8 +183,8 @@ AUTH_PROFILE_MODULE = "usuarios.Perfil"
 
 #Email Params
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = '' #cuenta gmail de preferencia
-EMAIL_HOST_PASSWORD = '' 
+EMAIL_HOST_USER = 'ayudanteusm@gmail.com' #cuenta gmail de preferencia
+EMAIL_HOST_PASSWORD = 'kenolamasca' 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

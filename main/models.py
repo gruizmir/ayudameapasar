@@ -4,7 +4,7 @@ from django.db import models
 from smart_selects.db_fields import ChainedForeignKey 
 
 class Region(models.Model):
-    nombre = models.CharField(max_length=30L, blank=True)
+    nombre = models.CharField(max_length=55L, blank=True)
     numero = models.CharField(max_length=2L, blank=True)
     
     class Meta:
