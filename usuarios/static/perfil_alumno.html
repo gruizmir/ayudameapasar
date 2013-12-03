@@ -90,7 +90,9 @@ $(function() {
             <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
         </div>
         <div class="col-lg-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png" alt="" width="60px">
+          <a href="{% url 'ayudantias.views.editar_ayudantia' ayudantia.pk %}">
+            <img class="img-btn" src="/static/img/edit.png" alt="" width="60px">
+          </a>
         </div>
         <div class="col-lg-1"><!-- Publicar/Despublicar -->
           {% if ayudantia.estado == "publicado" %}

@@ -31,8 +31,8 @@ class Ayudantia(models.Model):
 			 ("3", "Baneado")
 			)
 	estado = models.CharField(max_length=1, choices=ESTADOS, default="1")
-	fecha_publicacion = models.DateTimeField(auto_now_add=True)
-	fecha_termino = models.DateTimeField()
+	fecha_publicacion = models.DateField(auto_now_add=True)
+	fecha_termino = models.DateField()
 	categoria = models.ForeignKey(Categoria, null=True, blank=True)
 	subcategoria = ChainedForeignKey(
 		Subcategoria, 
@@ -47,6 +47,12 @@ class Ayudantia(models.Model):
 
 	def __unicode__(self):
 		return self.nombre
+
+	def GetAyudantia(self, ayudantia_id):
+		try:
+			return Ayudantia.objects.get(pk = ayudantia_id)
+		except Ayudantia.DoesNotExist:
+			return None
 
 	# Metodos
 	def GetAyudantias(self):
@@ -80,7 +86,7 @@ class AlumnoAyudantia(models.Model):
 	horario = models.ForeignKey(HorarioAyudantia)
 	asistio = models.BooleanField(default=False)
 	aceptada = models.BooleanField(default=False)
-	fecha_solicitud = models.DateTimeField(auto_now_add=True)
+	fecha_solicitud = models.DateField(auto_now_add=True)
 	cantidad_personas = models.IntegerField(default=1, verbose_name="Cantidad de asistentes")
 	
 	def __unicode__(self):

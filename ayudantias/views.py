@@ -86,3 +86,36 @@ def publicar_ayudantia(request):
 	data['horarioForm'] = formulario_horario
 	return render_to_response("publicar_ayudantia.html", data, context_instance=RequestContext(request))
 
+@login_required
+def editar_ayudantia(request, ayudantia_id):
+	data = {}
+
+	ayudantia = Ayudantia().GetAyudantia(ayudantia_id)
+	if ayudantia is None:
+		messages.error(request, "La ayudantia no existe...")
+		return HttpResponseRedirect("/ayudantias/")
+
+	horario = ayudantia.horarioayudantia_set.all()[0]
+
+	if request.method == 'POST':
+		formulario_ayudantia = publicarAyudantiaForm(request.POST, instance=ayudantia)
+		formulario_horario = horarioAyudantiaForm(request.POST, instance=horario)
+		
+		if formulario_ayudantia.is_valid() and formulario_horario.is_valid():
+			ayudantia = formulario_ayudantia.save(commit=False)
+			horario = formulario_horario.save(commit=False)
+			ayudantia.save()
+			horario.save()
+
+			messages.success(request, "Se ha actualizado correctamente el aviso de ayudantía")
+			return HttpResponseRedirect("/ayudantias/")
+		else:
+			messages.error(request, "Error al actualizar ayudantia, revise bien los campos!")
+	else:
+		formulario_ayudantia = publicarAyudantiaForm(instance = ayudantia)
+		formulario_horario = horarioAyudantiaForm(instance = horario)
+
+	data['ayudantia_id'] = ayudantia_id
+	data['ayudantiaForm'] = formulario_ayudantia
+	data['horarioForm'] = formulario_horario
+	return render_to_response("editar_ayudantia.html", data, context_instance=RequestContext(request))	
