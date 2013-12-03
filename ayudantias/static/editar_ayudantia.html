@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+
+{% load bootstrap_toolkit %}
+
+
+{% block right_content %}
+<div class="container">
+  <div class="row">
+    <h1>Editando ayudantía</h1>
+    <h3>Recuerda que modificar el precio no afecta aquellos que te han solicitado ayudantías.</h3>
+    <div class="col-lg-8 bottom-spaced">
+      {% if ayudantiaForm and horarioForm %}
+      <form class="form" method="POST" action="">
+        {% csrf_token %}
+        <h2>Ayudant&iacute;a</h2>
+        {{ ayudantiaForm|as_bootstrap }}
+        <h2>Horario</h2>
+        {{ horarioForm|as_bootstrap }}
+        <div style="height: 20px;"></div>
+        <button type="submit" class="btn btn-primary righted">Actualizar</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
