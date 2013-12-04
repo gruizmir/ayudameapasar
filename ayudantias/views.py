@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, SuspiciousOperation
-from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib import messages
+from django.utils import simplejson
 
 from ayudantias.models import *
 from usuarios.models import Ayudante, Perfil
@@ -118,4 +119,27 @@ def editar_ayudantia(request, ayudantia_id):
 	data['ayudantia_id'] = ayudantia_id
 	data['ayudantiaForm'] = formulario_ayudantia
 	data['horarioForm'] = formulario_horario
-	return render_to_response("editar_ayudantia.html", data, context_instance=RequestContext(request))	
+	return render_to_response("editar_ayudantia.html", data, context_instance=RequestContext(request))
+
+
+def pedirHora(request, idAyudantia=None):
+    if request.is_ajax():
+        alumno = request.user
+        try:
+            ayudantia = Ayudantia.objects.get(id=idAyudantia)
+            horario = HorarioAyudantia.objects.filter(ayudantia=ayudantia)
+            if horario.exists():
+                print horario
+                print list(horario)[0]
+                solicitud = AlumnoAyudantia(alumno=alumno, ayudantia=ayudantia, horario=list(horario)[0])
+                solicitud.save()
+                
+                message = {"response": "OK", "result":""}
+            else:
+                message = {"response": "ERROR", "result":"HORARIO NOT FOUND"}
+        except:
+            message = {"response": "ERROR", "result":"404"}
+    else:
+        raise Http404
+    json = simplejson.dumps(message)
+    return HttpResponse(json, mimetype='application/json')

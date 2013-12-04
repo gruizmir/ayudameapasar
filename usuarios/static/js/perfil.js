@@ -92,11 +92,11 @@ function evaluar(tipo, ident){
         if(response=="OK"){
             result = data.result;
             $("#evalDialog")[0].innerHTML = result;
-            $("#evalDialog").dialog('open')
         }
         else{
-            $("#user-data-div")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+            $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
         }
+        $("#evalDialog").dialog('open');
     });
 }
 
@@ -114,10 +114,65 @@ function denunciar(tipo, ident){
         if(response=="OK"){
             result = data.result;
             $("#evalDialog")[0].innerHTML = result;
-            $("#evalDialog").dialog('open')
         }
         else{
-            $("#user-data-div")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+            $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
         }
+        $("#evalDialog").dialog('open');
+    });
+}
+
+
+
+function sendEval(){
+    var target = document.getElementById('spinner-div');
+    var spinner = new Spinner(opts).spin(target);
+    $("#fader").show();
+    $("#spinner-div").show();
+    $.ajax({
+        data: $("#evaluationForm").serialize(),
+        type: $("#evaluationForm").attr('method'),
+        url: $("#evaluationForm").attr('action'),
+        success: function(data) {
+            $("#fader").hide();
+            $("#spinner-div").hide();
+            spinner.stop();
+            response = data.response;
+            if(response=="OK"){
+                result = data.result;
+                $("#evalDialog")[0].innerHTML = result;
+            }
+            else{
+                $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+            }
+            $("#evalDialog").dialog('open');
+        },
+    });
+}
+
+
+function sendReport(){
+    var target = document.getElementById('spinner-div');
+    var spinner = new Spinner(opts).spin(target);
+    $("#fader").show();
+    $("#spinner-div").show();
+    $.ajax({
+        data: $("#reportForm").serialize(),
+        type: $("#reportForm").attr('method'),
+        url: $("#reportForm").attr('action'),
+        success: function(data) {
+            $("#fader").hide();
+            $("#spinner-div").hide();
+            spinner.stop();
+            response = data.response;
+            if(response=="OK"){
+                result = data.result;
+                $("#evalDialog")[0].innerHTML = result;
+            }
+            else{
+                $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+            }
+            $("#evalDialog").dialog('open');
+        },
     });
 }

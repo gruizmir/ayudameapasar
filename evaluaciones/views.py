@@ -17,7 +17,7 @@ from ayudantias.models import Ayudantia
 # La idea es que sean mini-formularios dentro de dialogos.
 
 def evalAyudantia(request, idAyudantia=None):
-    if request.is_ajax() or request.method=="POST":
+    if request.is_ajax():
         form = EvalForm(request.POST)
         if form.is_valid():
             try:
@@ -28,22 +28,21 @@ def evalAyudantia(request, idAyudantia=None):
                 ayudante.eval_qty = ayudante.eval_qty +1
                 ayudante.puntuacion = (ayudante.puntuacion + punt.puntaje)/ayudante.eval_qty
                 ayudante.save()
-                #~ message = {"response": "OK"}
-                return HttpResponse("OK")
+                message = {"response": "OK"}
+                #~ return HttpResponse("OK")
             except:
-                #~ message = {"response": "ERROR", "result":"404"}
-                return HttpResponse("ERROR")
+                message = {"response": "ERROR", "result":"404"}
+                #~ return HttpResponse("ERROR")
         else:
-            #~ message = {"response": "ERROR", "result":"WRONG DATA"}
-            return HttpResponse("ERROR")
+            message = {"response": "ERROR", "result":"WRONG DATA"}
+            #~ return HttpResponse("ERROR")
     else:
-        #~ message = {"response": "ERROR", "result":"BAD METHOD"}
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
     return HttpResponse(json, mimetype='application/json')
 
 def evalAlumno(request, idAlumno=None):
-    if request.is_ajax() or request.method=="POST":
+    if request.is_ajax():
         form = EvalForm(request.POST)
         if form.is_valid():
             try:
@@ -54,24 +53,23 @@ def evalAlumno(request, idAlumno=None):
                 perfil.eval_qty = perfil.eval_qty +1
                 perfil.puntuacion = (perfil.puntuacion + punt.puntaje)/perfil.eval_qty
                 perfil.save()
-                #~ message = {"response": "OK"}
-                return HttpResponse("OK")
+                message = {"response": "OK"}
+                #~ return HttpResponse("OK")
             except:
-                #~ message = {"response": "ERROR", "result":"404"}
-                print form
-                return HttpResponse("ERROR")
+                message = {"response": "ERROR", "result":"404"}
+                #~ print form
+                #~ return HttpResponse("ERROR")
         else:
-            #~ message = {"response": "ERROR", "result":"WRONG DATA"}
-            return HttpResponse("ERROR")
+            message = {"response": "ERROR", "result":"WRONG DATA"}
+            #~ return HttpResponse("ERROR")
     else:
-        #~ message = {"response": "ERROR", "result":"BAD METHOD"}
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
     return HttpResponse(json, mimetype='application/json')
 
 
 def abusoAlumno(request, idAlumno=None):
-    if request.is_ajax() or request.method=="POST":
+    if request.is_ajax():
         form = AbusoForm(request.POST)
         if form.is_valid():
             try:
@@ -79,14 +77,14 @@ def abusoAlumno(request, idAlumno=None):
                 ayudante = request.user.ayudante
                 reporte = ReporteAbusoAlumno(alumno=alumno, reportador=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
                 reporte.save()
-                #~ message = {"response": "OK"}
-                return HttpResponse("OK")
+                message = {"response": "OK"}
+                #~ return HttpResponse("OK")
             except:
-                #~ message = {"response": "ERROR", "result":"404"}
-                return HttpResponse("ERROR")
+                message = {"response": "ERROR", "result":"404"}
+                #~ return HttpResponse("ERROR")
         else:
-            #~ message = {"response": "ERROR", "result":"WRONG DATA"}
-            return HttpResponse("ERROR")
+            message = {"response": "ERROR", "result":"WRONG DATA"}
+            #~ return HttpResponse("ERROR")
     else:
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
@@ -94,7 +92,7 @@ def abusoAlumno(request, idAlumno=None):
 
 
 def abusoAyudante(request, idAyudante=None):
-    if request.is_ajax() or request.method=="POST":
+    if request.is_ajax():
         form = AbusoForm(request.POST)
         if form.is_valid():
             try:
@@ -124,7 +122,7 @@ def getForm(request, typeName=None, identificador=None):
         data['type'] = "ayudantia"
         rend = render_to_response("report.html", data, context_instance=RequestContext(request))
     elif typeName=="abuso_alumno":
-        data['form'] = AbusoForm()
+        data['form'] = AbusoForm()  
         data['type'] = "alumno"
         rend = render_to_response("report.html", data, context_instance=RequestContext(request))
     elif typeName=="evaluacion_ayudante":

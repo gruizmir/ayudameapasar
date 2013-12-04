@@ -20,7 +20,10 @@ $(function() {
 <ul class="nav nav-tabs">
   <li class="active"><a href="#mi_panel" data-toggle="tab">Mi panel</a></li>
   <li><a href="#ayudantias" data-toggle="tab">Mis ayudantías</a></li>
-  <li><a href="#solicitudes" data-toggle="tab">Mis solicitudes</a></li>
+  <li><a href="#missolicitudes" data-toggle="tab">Mis solicitudes</a></li>
+  {% if request.user.perfil.es_ayudante %}
+    <li><a href="#solicitudespend" data-toggle="tab">Solicitudes pendientes</a></li>
+  {% endif %}
   <li><a href="#evaluaciones" data-toggle="tab">Evaluaciones pendientes</a></li>
 </ul>
 
@@ -62,6 +65,9 @@ $(function() {
   </div>
   <!-- END seccion "Mi panel" -->
 
+
+
+
   <!-- seccion "Mis ayudantias" -->
   <div class="tab-pane fade" id="ayudantias">
       <div class="row top-spaced">
@@ -72,12 +78,11 @@ $(function() {
           </a>
         </div>
       </div>
-    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
+      
       <hr noshade="noshade" class="nopadding" />
       <div class="row">
         <h3>Ayudantías Activas</h3>
       </div>
-      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
     
   {% if ayudantias %}
     {% for ayudantia in ayudantias %}
@@ -89,30 +94,30 @@ $(function() {
         </div>
         <div class="col-lg-1"><!-- Editar -->
           <a href="{% url 'ayudantias.views.editar_ayudantia' ayudantia.pk %}">
-            <img class="img-btn" src="/static/img/edit.png" alt="" width="60px">
+            <img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
           </a>
         </div>
         <div class="col-lg-1"><!-- Publicar/Despublicar -->
           {% if ayudantia.estado == "publicado" %}
-          <img class="img-btn" src="/static/img/unpublish.png" alt="" width="60px">
+          <img class="img-btn" src="/static/img/unpublish.png" alt="Despublicar" title="Despublicar">
           {% else %}
-          <img class="img-btn" src="/static/img/publish.png" alt="" width="60px">
+          <img class="img-btn" src="/static/img/publish.png" alt="Publicar" title="Publicar">
           {% endif %}
         </div>
-        <div class="col-lg-1"><!-- Ver mÃ¡s -->
-          <img class="img-btn" src="/static/img/more.png" alt="" width="60px">
+        <div class="col-lg-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
         </div>
         <div class="col-lg-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png" alt="" width="60px">
+          <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
         </div>
         <div class="col-lg-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png" alt="" width="60px">
+          <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
         </div>
       </div>
       {% empty %}
     {% endfor %}
   {% else %}
-    <div class="alert alert-info top-spaced"><strong>AÃºn no tienes ayudantÃ­as.</strong> Ingresa una nueva oferta.</div>
+    <div class="alert alert-info top-spaced"><strong>Aún no tienes ayudantías.</strong> Ingresa una nueva oferta.</div>
   {% endif%}
   </div>
   <!-- END seccion "Mis ayudantias" -->
@@ -121,61 +126,27 @@ $(function() {
 
   
   <!-- seccion "Mis solicitudes" -->
-  <div class="tab-pane fade" id="solicitudes">
-
-    <!-- ELIMINAR CUANDO SE TENGA LA LISTA -->
-      <div class="row result-entry top-spaced">
-        <div class="col-sm-7">
-            <h4>Ayudantia 1</h4>
-            <p>una ayudantia super cachilupi de un ramo random por ahi</p>
-            <span><strong>Ayudante:</strong> Juan Pérez</span><br>
-            <span><strong>Categorí­a:</strong> Matematicas - Cálculo en varias variables</span><br>
-        </div>
-        <div class="col-sm-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png">
-        </div>
-        <div class="col-sm-1"><!-- Publicar/Despublicar -->
-          <img class="img-btn" src="/static/img/unpublish.png">
-        </div>
-        <div class="col-sm-1"><!-- Ver mÃ¡s -->
-          <img class="img-btn" src="/static/img/more.png">
-        </div>
-        <div class="col-sm-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png">
-        </div>
-        <div class="col-sm-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png">
-        </div>
-      </div>
-      <!-- END ELIMINAR CUANDO SE TENGA LA LISTA -->
-      
+  <div class="tab-pane fade" id="missolicitudes">
   {% if solicitudes %}
     {% for solicitud in solicitudes %}
-      <div class="row result-entry">
-        <div class="col-sm-7">
+      <div class="row result-entry  top-spaced">
+        <div class="col-sm-8">
             <h4>{{solicitud.titulo}}</h4>
             <p>{{solicitud.descripcion|truncatechars:100}}</p>
             <span><strong>Alumno:</strong> {{solicitud.ayudante}}</span>
-            <span><strong>CategorÃ­a:</strong> {{solicitud.categoria}} - {{solicitud.subcategoria}}</span><br>
+            <span><strong>Categorí­a:</strong> {{solicitud.categoria}} - {{solicitud.subcategoria}}</span><br>
         </div>
         <div class="col-sm-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png">
+          <img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
         </div>
-        <div class="col-sm-1"><!-- Publicar/Despublicar -->
-          {% if solicitud.aceptada %}
-            <img class="img-btn" src="/static/img/unpublish.png">
-          {% else %}
-            <img class="img-btn" src="/static/img/publish.png">
-          {% endif %}
-        </div>
-        <div class="col-sm-1"><!-- Ver mÃ¡s -->
-          <img class="img-btn" src="/static/img/more.png">
+        <div class="col-sm-1"><!-- Ver más -->
+          <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
         </div>
         <div class="col-sm-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png">
+          <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
         </div>
         <div class="col-sm-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png">
+          <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
         </div>
       </div>
     {% endfor %}
@@ -186,6 +157,40 @@ $(function() {
   <!-- END seccion "Mis solicitudes" -->
 
 
+
+  {% if request.user.perfil.es_ayudante %}
+    <!-- sección: Solicitudes pendientes por aprobar -->
+    <div class="tab-pane fade" id="solicitudespend">
+    {% if solicitudes_pend %}
+      {% for solicitud in solicitudes_pend %}
+        <div class="row result-entry  top-spaced">
+          <div class="col-sm-8">
+              <h4>{{solicitud.ayudantia.titulo}}</h4>
+              <span><strong>Alumno:</strong> {{solicitud.alumno.get_full_name}}</span><br>
+              <span><strong>Categorí­a:</strong> {{solicitud.ayudantia.categoria}} - {{solicitud.ayudantia.subcategoria}}</span><br>
+              <span><strong>Horario:</strong> {{solicitud.horario.getDia}} {{solicitud.horario.hora_inicio}}-{{solicitud.horario.hora_final}}  </span>
+          </div>
+          <div class="col-sm-1"><!-- Editar -->
+            <img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
+          </div>
+          <div class="col-sm-1"><!-- Ver más -->
+            <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
+          </div>
+          <div class="col-sm-1"><!-- Solicitudes/Historial -->
+            <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
+          </div>
+          <div class="col-sm-1"><!-- Eliminar -->
+            <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info top-spaced"><strong>No han solicitado tus servicios aún.</strong> <a href="/ayudantias/publicar_ayudantia/">¿Deseas publicar una nueva ayudantía?</a></div>
+    {% endif %}
+    </div>
+    <!-- END seccion Solicitudes pendientes por evaluar -->
+  {% endif %}
+  
 
 
 
@@ -201,16 +206,16 @@ $(function() {
             <span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
         </div>
         <div class="col-sm-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})">
+          <img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})" alt="Editar" title="Editar">
         </div>
         <div class="col-sm-1"><!-- Ver más -->
-          <img class="img-btn" src="/static/img/more.png">
+          <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
         </div>
         <div class="col-sm-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png">
+          <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
         </div>
         <div class="col-sm-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png">
+          <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
         </div>
       </div>
     {% endfor %}
@@ -219,11 +224,11 @@ $(function() {
   {% endif %}
   </div>
   <!-- END seccion "Evaluaciones pendientes" -->
+
 </div>
 
 
-<div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia">
-    
-</div>
+
+<div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>
 
 {% endblock %}

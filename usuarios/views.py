@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from ayudantias.models import Ayudantia
+from ayudantias.models import Ayudantia, AlumnoAyudantia, HorarioAyudantia
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -120,8 +120,16 @@ def mostrarPerfilPropio(request):
 
     if user.perfil.es_ayudante:
         try:
-            data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
+            ayudantias = Ayudantia.objects.filter(ayudante=user.ayudante)
+            solicitudesPend = AlumnoAyudantia.objects.filter(aceptada=False).filter(ayudantia__in=ayudantias).order_by("-id")
+            print solicitudesPend
+            misSolicitudes  = AlumnoAyudantia.objects.filter(aceptada=False).filter(alumno=user).order_by("-id")
+            print misSolicitudes
+            data['solicitudes_pend'] = solicitudesPend
+            data['solicitudes'] = misSolicitudes
+            data['ayudantias'] = ayudantias
             data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
+            
         except ObjectDoesNotExist:
             pass
     return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))

@@ -19,7 +19,6 @@ class RegisterForm(Form):
     institucion = ModelChoiceField(required=True,
         queryset=Institucion.objects.all(),
         initial=0,
-        help_text="Por el momento, sólo disponible para usuarios de la UTFSM",
         widget=Select(attrs={'class':'form-control'})
     )
     email = EmailField(required=True, help_text="Debe ser tu email institucional", widget=TextInput(attrs={'class':'form-control'}))

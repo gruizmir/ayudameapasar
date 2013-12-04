@@ -3,6 +3,23 @@
 {% load bootstrap_toolkit %}
 
 {% block right_content %}
+<script type="text/javascript" src="/static/js/ayudantias.js"></script>
+<script>
+$(function() {
+    $( "#solicitarHoraDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:400
+    });
+
+    $( "#resultDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:400
+    });
+});
+</script>
+
 <h1>Ayudantias</h1>
 <table class="table">
 	<thead>
@@ -23,11 +40,26 @@
 			<td>{{ ayudantia.ayudante.usuario.first_name }} {{ ayudantia.ayudante.usuario.last_name }}</td>
 			<td>{{ ayudantia.categoria.nombre }}</td>
 			<td>{{ ayudantia.subcategoria.nombre }}</td>
-			<td>TO-DO</td>
+			<td><button type="button" class="btn btn-xs btn-success" onClick="pedirHora({{ayudantia.id}})">Pedir hora</button></td>
 		</tr>
 	{% empty %}
 		<tr><td>No existen ayudant&iacute;as.</td></tr>
 	{% endfor %}
 	</tbody>
 </table>
+
+<div id="solicitarHoraDialog" class="message-dialog" title="Solicitar ayudantía">
+    <h4 class="tcentered">¿Estás seguro de pedir esta ayudantía?</h4>
+    <div class="tcentered">
+        <form class="form" id="solicitarHoraForm" method="POST" action="/ayudantias/hora/">
+            {% csrf_token %}
+            <button type="button" class="btn btn-xs btn-success" onClick="confirmarSolicitud({{ayudantia.id}})">Sí, pedir hora</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="resultDialog" class="message-dialog" title="Solicitar ayudantía">
+    
+</div>
 {% endblock %}

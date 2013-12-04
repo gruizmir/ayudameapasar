@@ -1,5 +1,5 @@
-<form class="form" action="/evaluacion/reporte/{{type}}/{{ident}}/" method="POST">
+<form id="reportForm" class="form" action="/evaluacion/reporte/{{type}}/{{ident}}/" method="POST">
     {% csrf_token %}
     {{form.as_p}}
-    <input class="form-control btn btn-success" type="submit" value="Submit"/>
+    <button class="form-control btn btn-success" type="button" onClick="sendReport()">Submit</button>
 </form>

@@ -79,6 +79,9 @@ class HorarioAyudantia(models.Model):
 
 	def __unicode__(self):
 		return self.ayudantia.nombre
+
+	def getDia(self):
+		return self.DIAS[int(self.dia)-1][1]
 	
 class AlumnoAyudantia(models.Model):
 	alumno = models.ForeignKey(User)
