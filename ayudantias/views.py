@@ -123,23 +123,42 @@ def editar_ayudantia(request, ayudantia_id):
 
 
 def pedirHora(request, idAyudantia=None):
-    if request.is_ajax():
-        alumno = request.user
-        try:
-            ayudantia = Ayudantia.objects.get(id=idAyudantia)
-            horario = HorarioAyudantia.objects.filter(ayudantia=ayudantia)
-            if horario.exists():
-                print horario
-                print list(horario)[0]
-                solicitud = AlumnoAyudantia(alumno=alumno, ayudantia=ayudantia, horario=list(horario)[0])
-                solicitud.save()
-                
-                message = {"response": "OK", "result":""}
-            else:
-                message = {"response": "ERROR", "result":"HORARIO NOT FOUND"}
-        except:
-            message = {"response": "ERROR", "result":"404"}
-    else:
-        raise Http404
-    json = simplejson.dumps(message)
-    return HttpResponse(json, mimetype='application/json')
+	if request.is_ajax():
+		alumno = request.user
+		try:
+			ayudantia = Ayudantia.objects.get(id=idAyudantia)
+			horario = HorarioAyudantia.objects.filter(ayudantia=ayudantia)
+			if horario.exists():
+				print horario
+				print list(horario)[0]
+				solicitud = AlumnoAyudantia(alumno=alumno, ayudantia=ayudantia, horario=list(horario)[0])
+				solicitud.save()
+				
+				message = {"response": "OK", "result":""}
+			else:
+				message = {"response": "ERROR", "result":"HORARIO NOT FOUND"}
+		except:
+			message = {"response": "ERROR", "result":"404"}
+	else:
+		raise Http404
+	json = simplejson.dumps(message)
+	return HttpResponse(json, mimetype='application/json')
+
+def aceptarSolicitud(request, idAlumnoAyudantia=None):
+	if request.is_ajax():
+		alumno = request.user
+		try:
+			solicitud = AlumnoAyudantia.objects.get(id=idAlumnoAyudantia)
+			if solicitud:
+				solicitud.aceptada = True
+				solicitud.save()
+				
+				message = {"response": "OK", "result":""}
+			else:
+				message = {"response": "ERROR", "result":"Solicitud NOT FOUND"}
+		except:
+			message = {"response": "ERROR", "result":"404"}
+	else:
+		raise Http404
+	json = simplejson.dumps(message)
+	return HttpResponse(json, mimetype='application/json')

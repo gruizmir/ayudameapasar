@@ -176,3 +176,37 @@ function sendReport(){
         },
     });
 }
+
+
+function aceptarSolicitud(ident){
+    $('#confirmarSolicitudForm').attr('action', '/ayudantias/solicitud/' + ident + "/");
+    $("#confirmarSolicitudDialog").dialog('open');
+}
+
+
+function confirmarSolicitudAyudantia(){
+    var target = document.getElementById('spinner-div');
+    var spinner = new Spinner(opts).spin(target);
+    $("#fader").show();
+    $("#spinner-div").show();
+    $.ajax({
+        data: $("#confirmarSolicitudForm").serialize(),
+        type: $("#confirmarSolicitudForm").attr('method'),
+        url: $("#confirmarSolicitudForm").attr('action'),
+        success: function(data) {
+            $("#fader").hide();
+            $("#spinner-div").hide();
+            spinner.stop();
+            $("#confirmarSolicitudDialog").dialog('close');
+            response = data.response;
+            if(response=="OK"){
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-success top-spaced right-spaced left-spaced\"><strong>Solicitud aceptada correctamente.</strong></div>";
+            }
+            else{
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced right-spaced left-spaced\"><strong>No se pudo ejecutar la acción.</strong></div>";
+                console.log(data.result);
+            }
+            $("#resultDialog").dialog('open');
+        },
+    });
+}

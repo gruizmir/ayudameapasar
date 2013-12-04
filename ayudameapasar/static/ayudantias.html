@@ -25,10 +25,11 @@ $(function() {
 	<thead>
 		<tr>
 			<th>Fecha de publicaci&oacute;n</th>
-			<th>Nombre</th>
+			<th>Título</th>
 			<th>Ayudante</th>
 			<th>Categor&iacute;a</th>
 			<th>Subcategor&iacute;a</th>
+			<th>Costo</th>
 			<th>Acciones</th>
 		</tr>
 	</thead>
@@ -40,6 +41,7 @@ $(function() {
 			<td>{{ ayudantia.ayudante.usuario.first_name }} {{ ayudantia.ayudante.usuario.last_name }}</td>
 			<td>{{ ayudantia.categoria.nombre }}</td>
 			<td>{{ ayudantia.subcategoria.nombre }}</td>
+			<td>${{ ayudantia.costo_por_hora }}</td>
 			<td><button type="button" class="btn btn-xs btn-success" onClick="pedirHora({{ayudantia.id}})">Pedir hora</button></td>
 		</tr>
 	{% empty %}
