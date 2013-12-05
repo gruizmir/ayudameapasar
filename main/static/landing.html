@@ -7,6 +7,7 @@
 {% block right_content %}
 <link href="/static/css/perfil.css" rel="stylesheet">
 <script type="text/javascript" src="/static/js/ayudantias.js"></script>
+<script type="text/javascript" src="/static/js/perfil.js"></script>
 <script>
 $(function() {
     $( "#solicitarHoraDialog" ).dialog({
@@ -20,6 +21,18 @@ $(function() {
           autoOpen:false,
           minWidth:400
     });
+    
+    $( "#detailDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:600
+    });
+    
+    $( "#evalDialog" ).dialog({
+					dialogClass: "no-close",
+					autoOpen:false,
+					minWidth:600
+		});
 });
 </script>
 
@@ -41,7 +54,7 @@ $(function() {
             <div class="box-ayudantia-titulo">
               <div class="row">
                 <div class="col-md-9">{{ ayudantia.categoria }}/{{ayudantia.subcategoria}}</div>
-                <div class="col-md-2 text-right" style="padding-right: 0px;"><img src="{{STATIC_URL}}img/delete.png" alt="" width="14px" style="padding-right: 0px;" /></div>
+                <div class="col-md-2 text-right" style="padding-right: 0px;"><img src="{{STATIC_URL}}img/delete.png" alt="" width="14px" style="padding-right: 0px;" title="Denunciar" onClick="denunciar('anuncio', {{ayudantia.id}})"/></div>
               </div>
             </div>
             <div class="box-ayudantia-ayudante">
@@ -53,7 +66,7 @@ $(function() {
             <div class="box-ayudantia-descripcion">{{ ayudantia.descripcion }}</div>
             <div class="box-ayudantia-toolbox">
               <div class="row text-right">
-                <img src="{{STATIC_URL}}img/more.png" alt="" />
+                <img src="{{STATIC_URL}}img/more.png" alt="" onClick="getAyudantia({{ayudantia.id}})"/>
                 <img src="{{STATIC_URL}}img/request.png" alt="" />
                 <button type="button" class="btn btn-xs btn-success" onClick="pedirHora({{ayudantia.id}})">Pedir hora</button>
               </div>
@@ -79,9 +92,9 @@ $(function() {
       </div>
   </div>
 
-
+  <div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>
   <div id="resultDialog" class="message-dialog" title="Solicitar ayudantía">
-  
+  <div id="detailDialog" class="message-dialog" title="Detalle de Ayudantía"></div>  
 </div>
 
 {% endblock %}
