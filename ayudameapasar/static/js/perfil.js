@@ -210,3 +210,32 @@ function confirmarSolicitudAyudantia(){
         },
     });
 }
+
+
+
+
+function getAyudantia(ident){
+    var target = document.getElementById('spinner-div');
+    var spinner = new Spinner(opts).spin(target);
+    $("#fader").show();
+    $("#spinner-div").show();
+    $.get( "/ayudantias/detalles/" + ident + "/", function( data ) {
+        $("#fader").hide();
+        $("#spinner-div").hide();
+        spinner.stop();
+        response = data.response;
+        console.log(response);
+        if(response=="OK"){
+            result = data.result;
+            $("#detailDialog")[0].innerHTML = result;
+            console.log(result);
+        }
+        else{
+            $("#detailDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+        }
+        $("#detailDialog").dialog('open');
+    });
+}
+
+
+

@@ -128,6 +128,35 @@ def abusoAyudante(request, idAlumnoAyudantia=None):
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
     return HttpResponse(json, mimetype='application/json')
+    
+
+def abusoAnuncio(request, idAyudantia=None):
+    if request.is_ajax():
+        form = AbusoForm(request.POST)
+        if form.is_valid():
+            try:
+                ayudantia = Ayudantia.objects.get(id=idAyudantia)
+                ayudante = ayudantia.ayudante
+                alumno = request.user
+                reporte = ReporteAbusoAyudante(reportador=alumno, ayudante=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
+                reporte.save()
+                
+                ayudante.eval_qty = ayudante.eval_qty + 1
+                ayudante.puntuacion = (ayudante.puntuacion - 1)/ayudante.eval_qty
+                ayudante.save()
+                
+                message = {"response": "OK"}
+            except Exception as e:
+                print e
+                message = {"response": "ERROR", "result":"404"}
+        else:
+            message = {"response": "ERROR", "result":"WRONG DATA"}
+    else:
+        return HttpResponse("ERROR")
+    json = simplejson.dumps(message)
+    return HttpResponse(json, mimetype='application/json')
+
+    
 
 
 def getForm(request, typeName=None, identificador=None):
@@ -140,6 +169,10 @@ def getForm(request, typeName=None, identificador=None):
     elif typeName=="abuso_alumno":
         data['form'] = AbusoForm()  
         data['type'] = "alumno"
+        rend = render_to_response("report.html", data, context_instance=RequestContext(request))
+    elif typeName=="abuso_anuncio":
+        data['form'] = AbusoForm()  
+        data['type'] = "anuncio"
         rend = render_to_response("report.html", data, context_instance=RequestContext(request))
     elif typeName=="evaluacion_ayudante":
         data['form'] = EvalForm()

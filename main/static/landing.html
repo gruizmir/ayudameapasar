@@ -6,7 +6,35 @@
 
 {% block right_content %}
 <link href="/static/css/perfil.css" rel="stylesheet">
+<script type="text/javascript" src="/static/js/ayudantias.js"></script>
+<script type="text/javascript" src="/static/js/perfil.js"></script>
+<script>
+$(function() {
+    $( "#solicitarHoraDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:400
+    });
 
+    $( "#resultDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:400
+    });
+    
+    $( "#detailDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:600
+    });
+    
+    $( "#evalDialog" ).dialog({
+					dialogClass: "no-close",
+					autoOpen:false,
+					minWidth:600
+		});
+});
+</script>
 
 <div class="tab-content">
   <div class="tab-pane fade in active" id="mi_panel">
@@ -18,41 +46,55 @@
   
 
   {% if ayudantias %}
-    {% for ayudantia in ayudantias %}
-      <div class="row boxed ayudantia-box">
-        <div class="col-md-7">
-            <h4>{{ayudantia.titulo}}</h4>
-            <p>{{ayudantia.descripcion|truncatechars:100}}</p>
-            <span><strong>Categoría:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
+    <div class="row">
+        {% for ayudantia in ayudantias %}
+        <!-- Ayudantia block -->
+        <div class="col-md-3">
+           <div class="box-ayudantia">
+            <div class="box-ayudantia-titulo">
+              <div class="row">
+                <div class="col-md-9">{{ ayudantia.categoria }}/{{ayudantia.subcategoria}}</div>
+                <div class="col-md-2 text-right" style="padding-right: 0px;"><img src="{{STATIC_URL}}img/delete.png" alt="" width="14px" style="padding-right: 0px;" title="Denunciar" onClick="denunciar('anuncio', {{ayudantia.id}})"/></div>
+              </div>
+            </div>
+            <div class="box-ayudantia-ayudante">
+              <div class="row">
+                <div class="col-md-5"><a href="/cuentas/{{ayudantia.ayudante.usuario.id}}/perfil/">{{ ayudantia.ayudante.usuario.get_full_name }}</a></div>
+                <div class="col-md-7 text-right" style="padding-right: 0px;">{{ ayudantia.ayudante.puntuacion }} pts.</div>
+              </div>
+            </div>
+            <div class="box-ayudantia-descripcion">{{ ayudantia.descripcion }}</div>
+            <div class="box-ayudantia-toolbox">
+              <div class="row text-right">
+                <img src="{{STATIC_URL}}img/more.png" alt="" onClick="getAyudantia({{ayudantia.id}})" title="Ver más"/>
+                <img src="{{STATIC_URL}}img/request.png" alt="" />
+                <button type="button" class="btn btn-xs btn-success" onClick="pedirHora({{ayudantia.id}})">Pedir hora</button>
+              </div>
+            </div>
+           </div>
         </div>
-        <div class="col-lg-1"><!-- Editar -->
-          <img class="img-btn" src="/static/img/edit.png" alt="" width="60px">
-        </div>
-        <div class="col-lg-1"><!-- Publicar/Despublicar -->
-          {% if ayudantia.estado == "publicado" %}
-          <img class="img-btn" src="/static/img/unpublish.png" alt="" width="60px">
-          {% else %}
-          <img class="img-btn" src="/static/img/publish.png" alt="" width="60px">
-          {% endif %}
-        </div>
-        <div class="col-lg-1"><!-- Ver más -->
-          <img class="img-btn" src="/static/img/more.png" alt="" width="60px">
-        </div>
-        <div class="col-lg-1"><!-- Solicitudes/Historial -->
-          <img class="img-btn" src="/static/img/requests.png" alt="" width="60px">
-        </div>
-        <div class="col-lg-1"><!-- Eliminar -->
-          <img class="img-btn" src="/static/img/delete.png" alt="" width="60px">
-        </div>
-      </div>
-      {% empty %}
-    {% endfor %}
+        <!-- Fin Ayudantia block -->
+        {% endfor %}
+    </div>
   {% else %}
     <div class="alert alert-info top-spaced">
     	<strong>Ayudameapasar.cl.</strong> Está triste :( no hay ninguna ayudantia! Anda a tu perfil y agrega una!
     </div>
   {% endif%}
   
+  <div id="solicitarHoraDialog" class="message-dialog" title="Solicitar ayudantía">
+      <h4 class="tcentered">¿Estás seguro de pedir esta ayudantía?</h4>
+      <div class="tcentered">
+          <form class="form" id="solicitarHoraForm" method="POST" action="/ayudantias/hora/">
+              {% csrf_token %}
+              <button type="button" class="btn btn-xs btn-success" onClick="confirmarSolicitud({{ayudantia.id}})">Sí, pedir hora</button>
+          </form>
+      </div>
+  </div>
+
+  <div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>
+  <div id="resultDialog" class="message-dialog" title="Solicitar ayudantía">
+  <div id="detailDialog" class="message-dialog" title="Detalle de Ayudantía"></div>  
 </div>
 
 {% endblock %}

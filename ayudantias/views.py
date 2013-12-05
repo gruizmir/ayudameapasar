@@ -162,3 +162,21 @@ def aceptarSolicitud(request, idAlumnoAyudantia=None):
 		raise Http404
 	json = simplejson.dumps(message)
 	return HttpResponse(json, mimetype='application/json')
+    
+
+
+def getAyudantia(request, idAyudantia=None):
+	if request.is_ajax():
+		try:
+			ayudantia = Ayudantia.objects.get(id=idAyudantia)
+			rend = render_to_response("detalle_ayudantia.html", {'ayudantia':ayudantia}, context_instance=RequestContext(request))
+			message = {"response": "OK", "result":rend.content}
+		except Exception as e:
+			print e
+			message = {"response": "ERROR", "result":"404"}
+	else:
+		print "404"
+		raise Http404
+	json = simplejson.dumps(message)
+	return HttpResponse(json, mimetype='application/json')
+    

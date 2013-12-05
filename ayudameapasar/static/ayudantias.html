@@ -17,6 +17,12 @@ $(function() {
           autoOpen:false,
           minWidth:400
     });
+    
+    $( "#detailDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:600
+    });
 });
 </script>
 
@@ -37,7 +43,7 @@ $(function() {
 	{% for ayudantia in lista_ayudantias %}
 		<tr>
 			<td>{{ ayudantia.fecha_publicacion|date:"d/m/Y" }}</td>
-			<td>{{ ayudantia.nombre }}</td>
+			<td><a onClick="getAyudantia({{ayudantia.id}})">{{ ayudantia.nombre }}</a></td>
 			<td>{{ ayudantia.ayudante.usuario.first_name }} {{ ayudantia.ayudante.usuario.last_name }}</td>
 			<td>{{ ayudantia.categoria.nombre }}</td>
 			<td>{{ ayudantia.subcategoria.nombre }}</td>
@@ -60,8 +66,6 @@ $(function() {
     </div>
 </div>
 
-
-<div id="resultDialog" class="message-dialog" title="Solicitar ayudantía">
-    
-</div>
+<div id="resultDialog" class="message-dialog" title="Solicitar ayudantía"></div>
+<div id="detailDialog" class="message-dialog" title="Detalle de Ayudantía"></div>
 {% endblock %}
