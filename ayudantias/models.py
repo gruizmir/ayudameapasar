@@ -88,8 +88,11 @@ class AlumnoAyudantia(models.Model):
 	ayudantia = models.ForeignKey(Ayudantia)
 	horario = models.ForeignKey(HorarioAyudantia)
 	asistio = models.BooleanField(default=False)
+	ayudante_evaluo = models.BooleanField(default=False)
+	alumno_evaluo = models.BooleanField(default=False)
 	aceptada = models.BooleanField(default=False)
 	fecha_solicitud = models.DateField(auto_now_add=True)
+	fecha_realizacion = models.DateField(auto_now_add=True)
 	cantidad_personas = models.IntegerField(default=1, verbose_name="Cantidad de asistentes")
 	
 	def __unicode__(self):
