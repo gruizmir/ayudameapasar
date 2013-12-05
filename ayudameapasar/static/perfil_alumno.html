@@ -254,11 +254,11 @@ $(function() {
         <div class="row result-entry">
           <div class="col-sm-8">
               <h4>{{evaluacion.ayudantia.titulo}}</h4>
-              <span><strong>Alumno a evaluar:</strong> {{evaluacion.alumno.get_full_name}} (<a onClick="denunciar('alumno', {{evaluacion.alumno.id}})">Denunciar</a>)</span><br>
+              <span><strong>Alumno a evaluar:</strong> {{evaluacion.alumno.get_full_name}} (<a onClick="denunciar('alumno', {{evaluacion.id}})">Denunciar</a>)</span><br>
               <span><strong>Categoría:</strong> {{evaluacion.ayudantia.categoria}} - {{evaluacion.ayudantia.ubcategoria}}</span><br>
           </div>
           <div class="col-sm-1"><!-- Evaluar -->
-            <button class="btn btn-success" onClick="evaluar('alumno', {{evaluacion.alumno.id}})" title="Evaluar">Evaluar</button>
+            <button class="btn btn-success" onClick="evaluar('alumno', {{evaluacion.id}})" title="Evaluar">Evaluar</button>
           </div>
         </div>
       {% endfor %}
@@ -276,11 +276,11 @@ $(function() {
         <div class="row result-entry">
           <div class="col-sm-10">
               <h4>{{eval.ayudantia.titulo}}</h4>
-              <span><strong>Ayudante a evaluar:</strong> {{eval.ayudantia.ayudante}} (<a onClick="denunciar('ayudante', {{eval.ayudantia.ayudante.id}})">Denunciar</a>)</span><br>
+              <span><strong>Ayudante a evaluar:</strong> {{eval.ayudantia.ayudante}} (<a onClick="denunciar('ayudante', {{eval.id}})">Denunciar</a>)</span><br>
               <span><strong>Categoría:</strong> {{eval.ayudantia.categoria}} - {{eval.ayudantia.subcategoria}}</span><br>
           </div>
           <div class="col-sm-2"><!-- Evaluar -->
-            <button class="btn btn-success" onClick="evaluar('ayudante', {{eval.ayudantia.ayudante.id}})" title="Evaluar">Evaluar</button>
+            <button class="btn btn-success" onClick="evaluar('ayudante', {{eval.id}})" title="Evaluar">Evaluar</button>
           </div>
         </div>
       {% endfor %}

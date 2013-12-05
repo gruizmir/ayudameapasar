@@ -10,58 +10,61 @@ from django.utils import simplejson
 from evaluaciones.models import *
 from evaluaciones.forms import *
 from usuarios.models import Ayudante
-from ayudantias.models import Ayudantia
+from ayudantias.models import Ayudantia, AlumnoAyudantia
 
 
 # Se trabaja sobre la base de que las llamadas van a ser por ajax.
 # La idea es que sean mini-formularios dentro de dialogos.
 
-def evalAyudantia(request, idAyudantia=None):
+def evalAyudantia(request, idAlumnoAyudantia=None):
     if request.is_ajax():
         form = EvalForm(request.POST)
         if form.is_valid():
             try:
-                ayudantia = Ayudantia.objects.get(id=idAyudantia)
-                punt = PuntuacionAyudantes(ayudantia=ayudantia, puntaje=form.cleaned_data['puntaje'], descripcion=form.cleaned_data['descripcion'])
+                alumnoAyudantia = AlumnoAyudantia.objects.get(id=idAlumnoAyudantia)
+                ayudantia = alumnoAyudantia.ayudantia
+                punt = PuntuacionAyudantes(ayudantia=ayudantia, puntaje=form.cleaned_data['puntaje'], description=form.cleaned_data['descripcion'])
                 punt.save()
+                
                 ayudante = ayudantia.ayudante
                 ayudante.eval_qty = ayudante.eval_qty +1
                 ayudante.puntuacion = (ayudante.puntuacion + punt.puntaje)/ayudante.eval_qty
                 ayudante.save()
+                alumnoAyudantia.alumno_evaluo = True
+                alumnoAyudantia.save()
                 message = {"response": "OK"}
-                #~ return HttpResponse("OK")
-            except:
+            except Exception as e:
+                print e
                 message = {"response": "ERROR", "result":"404"}
-                #~ return HttpResponse("ERROR")
         else:
+            print form
             message = {"response": "ERROR", "result":"WRONG DATA"}
-            #~ return HttpResponse("ERROR")
     else:
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
     return HttpResponse(json, mimetype='application/json')
 
-def evalAlumno(request, idAlumno=None):
+def evalAlumno(request, idAlumnoAyudantia=None):
     if request.is_ajax():
         form = EvalForm(request.POST)
         if form.is_valid():
             try:
-                alumno = User.objects.get(id=idAlumno)
-                punt = PuntuacionAlumno(usuario=alumno, puntaje=form.cleaned_data['puntaje'], descripcion=form.cleaned_data['descripcion'])
+                alumnoAyudantia = AlumnoAyudantia.objects.get(id=idAlumnoAyudantia)
+                alumno = alumnoAyudantia.alumno
+                punt = PuntuacionAlumno(usuario=alumno, puntaje=form.cleaned_data['puntaje'], description=form.cleaned_data['descripcion'])
                 punt.save()
                 perfil = alumno.perfil
                 perfil.eval_qty = perfil.eval_qty +1
                 perfil.puntuacion = (perfil.puntuacion + punt.puntaje)/perfil.eval_qty
                 perfil.save()
+                alumnoAyudantia.ayudante_evaluo = True
+                alumnoAyudantia.save()
                 message = {"response": "OK"}
-                #~ return HttpResponse("OK")
-            except:
+            except Exception as e:
+                print e
                 message = {"response": "ERROR", "result":"404"}
-                #~ print form
-                #~ return HttpResponse("ERROR")
         else:
             message = {"response": "ERROR", "result":"WRONG DATA"}
-            #~ return HttpResponse("ERROR")
     else:
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
@@ -78,13 +81,10 @@ def abusoAlumno(request, idAlumno=None):
                 reporte = ReporteAbusoAlumno(alumno=alumno, reportador=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
                 reporte.save()
                 message = {"response": "OK"}
-                #~ return HttpResponse("OK")
             except:
                 message = {"response": "ERROR", "result":"404"}
-                #~ return HttpResponse("ERROR")
         else:
             message = {"response": "ERROR", "result":"WRONG DATA"}
-            #~ return HttpResponse("ERROR")
     else:
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)
@@ -100,13 +100,10 @@ def abusoAyudante(request, idAyudante=None):
                 alumno = request.user
                 reporte = ReporteAbusoAyudante(reportador=alumno, ayudante=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
                 reporte.save()
-                 #~ message = {"response": "OK"}
                 return HttpResponse("OK")
             except:
-                #~ message = {"response": "ERROR", "result":"404"}
                 return HttpResponse("ERROR")
         else:
-            #~ message = {"response": "ERROR", "result":"WRONG DATA"}
             return HttpResponse("ERROR")
     else:
         return HttpResponse("ERROR")

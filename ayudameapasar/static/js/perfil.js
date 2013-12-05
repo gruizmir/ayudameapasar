@@ -134,18 +134,19 @@ function sendEval(){
         type: $("#evaluationForm").attr('method'),
         url: $("#evaluationForm").attr('action'),
         success: function(data) {
+            $("#evalDialog").dialog('close');
             $("#fader").hide();
             $("#spinner-div").hide();
             spinner.stop();
             response = data.response;
-            if(response=="OK"){
-                result = data.result;
-                $("#evalDialog")[0].innerHTML = result;
+             if(response=="OK"){
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-success top-spaced right-spaced left-spaced\"> <strong>Evaluación enviada correctamente.</strong></div>";
             }
             else{
-                $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced right-spaced left-spaced\"><strong>No se pudo ejecutar la acción.</strong></div>";
+                console.log(data.result);
             }
-            $("#evalDialog").dialog('open');
+            $("#resultDialog").dialog('open');
         },
     });
 }
@@ -161,18 +162,18 @@ function sendReport(){
         type: $("#reportForm").attr('method'),
         url: $("#reportForm").attr('action'),
         success: function(data) {
+            $("#evalDialog").dialog('close');
             $("#fader").hide();
             $("#spinner-div").hide();
             spinner.stop();
             response = data.response;
             if(response=="OK"){
-                result = data.result;
-                $("#evalDialog")[0].innerHTML = result;
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-success top-spaced right-spaced left-spaced\"><strong>Reporte enviado correctamente.</strong></div>";
             }
             else{
-                $("#evalDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced\"><strong>No se pudo ejecutar la acción.</div>";
+                $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced right-spaced left-spaced\"><strong>No se pudo ejecutar la acción.</strong></div>";
             }
-            $("#evalDialog").dialog('open');
+            $("#resultDialog").dialog('open');
         },
     });
 }
@@ -204,7 +205,6 @@ function confirmarSolicitudAyudantia(){
             }
             else{
                 $("#resultDialog")[0].innerHTML = "<div class=\"alert alert-warning top-spaced right-spaced left-spaced\"><strong>No se pudo ejecutar la acción.</strong></div>";
-                console.log(data.result);
             }
             $("#resultDialog").dialog('open');
         },
