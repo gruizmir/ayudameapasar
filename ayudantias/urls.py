@@ -9,4 +9,5 @@ urlpatterns = patterns('ayudantias.views',
 	url(r'^editar_ayudantia/(?P<ayudantia_id>\d+)', 'editar_ayudantia'),
     url(r'^hora/(\d+)/$', 'pedirHora'),
     url(r'^solicitud/(\d+)/$', 'aceptarSolicitud'),
+    url(r'^detalles/(\d+)/$', 'getAyudantia'),
 )

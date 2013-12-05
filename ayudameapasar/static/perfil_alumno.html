@@ -27,6 +27,12 @@ $(function() {
           autoOpen:false,
           minWidth:400
     });
+    
+    $( "#detailDialog" ).dialog({
+          dialogClass: "no-close",
+          autoOpen:false,
+          minWidth:600
+    });
 });
 </script>
 
@@ -130,7 +136,7 @@ $(function() {
 					{% endif %}
 				</div>
 				<div class="col-lg-1"><!-- Ver más -->
-					<img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
+					<img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más" onClick="getAyudantia({{ayudantia.id}})">
 				</div>
 				<div class="col-lg-1"><!-- Solicitudes/Historial -->
 					<img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
@@ -306,6 +312,7 @@ $(function() {
 
 <div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>
 <div id="resultDialog" class="message-dialog" title="Aceptar solicitud"></div>
+<div id="detailDialog" class="message-dialog" title="Detalle de Ayudantía"></div>
 <div id="confirmarSolicitudDialog" class="message-dialog" title="Aceptar solicitud">
   <h4 class="tcentered">¿Estás seguro de aceptar esta solicitud?</h4>
   <div class="tcentered">
