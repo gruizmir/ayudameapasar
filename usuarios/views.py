@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import datetime
 from ayudantias.models import Ayudantia, AlumnoAyudantia, HorarioAyudantia
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -122,11 +123,11 @@ def mostrarPerfilPropio(request):
         try:
             ayudantias = Ayudantia.objects.filter(ayudante=user.ayudante)
             solicitudesPend = AlumnoAyudantia.objects.filter(aceptada=False).filter(ayudantia__in=ayudantias).order_by("-id")
-            print solicitudesPend
             misSolicitudes  = AlumnoAyudantia.objects.filter(aceptada=False).filter(alumno=user).order_by("-id")
-            print misSolicitudes
+            agenda  = AlumnoAyudantia.objects.filter(aceptada=True).filter(ayudantia__in=ayudantias).order_by("-id")
             data['solicitudes_pend'] = solicitudesPend
             data['solicitudes'] = misSolicitudes
+            data['agenda'] = agenda
             data['ayudantias'] = ayudantias
             data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
             

@@ -36,6 +36,7 @@ $(function() {
 	<li><a href="#missolicitudes" data-toggle="tab">Mis solicitudes</a></li>
 	{% if request.user.perfil.es_ayudante %}
 		<li><a href="#solicitudespend" data-toggle="tab">Solicitudes pendientes</a></li>
+        <li><a href="#agenda" data-toggle="tab">Ayudantías agendadas</a></li>
 	{% endif %}
 	<li><a href="#evaluaciones" data-toggle="tab">Evaluaciones pendientes</a></li>
 </ul>
@@ -140,32 +141,36 @@ $(function() {
 	
 	<!-- seccion "Mis solicitudes" -->
 	<div class="tab-pane fade" id="missolicitudes">
-	{% if solicitudes %}
-		{% for solicitud in solicitudes %}
-			<div class="row result-entry  top-spaced">
-				<div class="col-sm-8">
-						<h4>{{solicitud.titulo}}</h4>
-						<p>{{solicitud.descripcion|truncatechars:100}}</p>
-						<span><strong>Alumno:</strong> {{solicitud.ayudante}}</span>
-						<span><strong>Categorí­a:</strong> {{solicitud.categoria}} - {{solicitud.subcategoria}}</span><br>
-				</div>
-				<div class="col-sm-1"><!-- Editar -->
-					<img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
-				</div>
-				<div class="col-sm-1"><!-- Ver más -->
-					<img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
-				</div>
-				<div class="col-sm-1"><!-- Solicitudes/Historial -->
-					<img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
-				</div>
-				<div class="col-sm-1"><!-- Eliminar -->
-					<img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
-				</div>
-			</div>
-		{% endfor %}
-	{% else %}
-		<div class="alert alert-info top-spaced"><strong>No has realizado solicitudes de ayudantía.</strong> <a href="/busqueda">¿Deseas buscar una ayudantí­a ahora?</a></div>
-	{% endif %}
+    <hr noshade="noshade" class="nopadding" />
+    <div class="row">
+      <h3>Solicitudes realizadas</h3>
+    </div>
+    {% if solicitudes %}
+      {% for solicitud in solicitudes %}
+        <div class="row result-entry  top-spaced">
+          <div class="col-sm-8">
+              <h4>{{solicitud.ayudantia.titulo}}</h4>
+              <span><strong>Ayudante:</strong> {{solicitud.ayudantia.ayudante}}</span><br>
+              <span><strong>Categorí­a:</strong> {{solicitud.ayudantia.categoria}} - {{solicitud.ayudantia.subcategoria}}</span><br>
+                          <span><strong>Horario:</strong> {{solicitud.horario.getDia}} {{solicitud.horario.hora_inicio}}-{{solicitud.horario.hora_final}}  </span>
+          </div>
+          <div class="col-sm-1"><!-- Editar -->
+            <img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
+          </div>
+          <div class="col-sm-1"><!-- Ver más -->
+            <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
+          </div>
+          <div class="col-sm-1"><!-- Solicitudes/Historial -->
+            <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
+          </div>
+          <div class="col-sm-1"><!-- Eliminar -->
+            <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info top-spaced"><strong>No has realizado solicitudes de ayudantía.</strong> <a href="/busqueda">¿Deseas buscar una ayudantí­a ahora?</a></div>
+    {% endif %}
 	</div>
 	<!-- END seccion "Mis solicitudes" -->
 
@@ -174,84 +179,116 @@ $(function() {
 	{% if request.user.perfil.es_ayudante %}
 		<!-- sección: Solicitudes pendientes por aprobar -->
 		<div class="tab-pane fade" id="solicitudespend">
-		{% if solicitudes_pend %}
-			{% for solicitud in solicitudes_pend %}
-				<div class="row result-entry  top-spaced">
-					<div class="col-sm-8">
-							<h4>{{solicitud.ayudantia.titulo}}</h4>
-							<span><strong>Alumno:</strong> {{solicitud.alumno.get_full_name}}</span><br>
-							<span><strong>Categorí­a:</strong> {{solicitud.ayudantia.categoria}} - {{solicitud.ayudantia.subcategoria}}</span><br>
-							<span><strong>Horario:</strong> {{solicitud.horario.getDia}} {{solicitud.horario.hora_inicio}}-{{solicitud.horario.hora_final}}  </span>
-					</div>
-					{% if solicitud.aceptada %}
-					<div class="col-sm-1"><!-- Aceptar -->
-						<img class="img-btn" src="/static/img/delete.png" alt="Rechazar" title="Rechazar">
-					</div>
-					{% else %}
-					<div class="col-sm-1"><!-- Rechazar -->
-						<img class="img-btn" src="/static/img/edit.png" alt="Aceptar" title="Aceptar" onClick="aceptarSolicitud({{solicitud.id}})">
-					</div>
-					{% endif %}
-				</div>
-			{% endfor %}
-		{% else %}
-			<div class="alert alert-info top-spaced"><strong>No han solicitado tus servicios aún.</strong> <a href="/ayudantias/publicar_ayudantia/">¿Deseas publicar una nueva ayudantía?</a></div>
-		{% endif %}
+      <hr noshade="noshade" class="nopadding" />
+      <div class="row">
+        <h3>Solicitudes recibidas</h3>
+      </div>
+      {% if solicitudes_pend %}
+        {% for solicitud in solicitudes_pend %}
+          <div class="row result-entry  top-spaced">
+            <div class="col-sm-11">
+                <h4>{{solicitud.ayudantia.titulo}}</h4>
+                <span><strong>Alumno:</strong> {{solicitud.alumno.get_full_name}}</span><br>
+                <span><strong>Categorí­a:</strong> {{solicitud.ayudantia.categoria}} - {{solicitud.ayudantia.subcategoria}}</span><br>
+                <span><strong>Horario:</strong> {{solicitud.horario.getDia}} {{solicitud.horario.hora_inicio}}-{{solicitud.horario.hora_final}}  </span>
+            </div>
+            {% if solicitud.aceptada %}
+            <div class="col-sm-1"><!-- Aceptar -->
+              <img class="img-btn" src="/static/img/delete.png" alt="Rechazar" title="Rechazar">
+            </div>
+            {% else %}
+            <div class="col-sm-1"><!-- Rechazar -->
+              <img class="img-btn" src="/static/img/edit.png" alt="Aceptar" title="Aceptar" onClick="aceptarSolicitud({{solicitud.id}})">
+            </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info top-spaced"><strong>No han solicitado tus servicios aún.</strong> <a href="/ayudantias/publicar_ayudantia/">¿Deseas publicar una nueva ayudantía?</a></div>
+      {% endif %}
 		</div>
-
-		<div id="confirmarSolicitudDialog" class="message-dialog" title="Aceptar solicitud">
-			<h4 class="tcentered">¿Estás seguro de aceptar esta solicitud?</h4>
-			<div class="tcentered">
-					<form class="form" id="confirmarSolicitudForm" method="POST" action="/ayudantias/solicitud/">
-							{% csrf_token %}
-							<button type="button" class="btn btn-xs btn-success" onClick="confirmarSolicitudAyudantia({{solicitud.id}})">Sí, aceptar solicitud</button>
-					</form>
-			</div>
-		</div>
-
-
-	<div id="resultDialog" class="message-dialog" title="Aceptar solicitud"></div>
-		<!-- END seccion Solicitudes pendientes por evaluar -->
-	{% endif %}
+    <!-- END seccion Solicitudes pendientes por aprobar -->
+    
+    
+    
+    
+    <!-- sección: Ayudantias agendadas -->
+		<div class="tab-pane fade" id="agenda">
+      <hr noshade="noshade" class="nopadding" />
+      <div class="row">
+        <h3>Ayudantías agendadas</h3>
+      </div>
+      {% if agenda %}
+        {% for entrada in agenda %}
+          <div class="row result-entry  top-spaced">
+            <div class="col-sm-11">
+              <h4>{{entrada.ayudantia.titulo}}</h4>
+              <span><strong>Alumno:</strong> {{entrada.alumno.get_full_name}}</span><br>
+              <span><strong>Categorí­a:</strong> {{entrada.ayudantia.categoria}} - {{entrada.ayudantia.subcategoria}}</span><br>
+              <span><strong>Horario:</strong> {{entrada.horario.getDia}} {{entrada.horario.hora_inicio}}-{{entrada.horario.hora_final}}  </span>
+            </div>
+            <div class="col-sm-1"><!-- Aceptar -->
+              <img class="img-btn" src="/static/img/delete.png" alt="Cancelar" title="Cancelar">
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info top-spaced"><strong>No tienes ayudantías agendadas.</strong> </div>
+      {% endif %}
+    </div>
+    <!-- END seccion: Ayudantias agendadas -->
+  {% endif %}
 	
 
 
 
 	<!-- seccion "Evaluaciones pendientes" -->
 	<div class="tab-pane fade" id="evaluaciones">
-	 {% if evaluaciones %}
-		{% for evaluacion in evaluaciones %}
-			<div class="row result-entry">
-				<div class="col-sm-8">
-						<h4>{{evaluacion.titulo}}</h4>
-						<p>{{evaluacion.descripcion|truncatechars:100}}</p>
-						<span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}} (<a onClick="denunciar('alumno', {{evaluacion.ayudante.usuario.id}})">Denunciar</a>)</span>
-						<span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
-				</div>
-				<div class="col-sm-1"><!-- Editar -->
-					<img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})" alt="Editar" title="Editar">
-				</div>
-				<div class="col-sm-1"><!-- Ver más -->
-					<img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
-				</div>
-				<div class="col-sm-1"><!-- Solicitudes/Historial -->
-					<img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
-				</div>
-				<div class="col-sm-1"><!-- Eliminar -->
-					<img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
-				</div>
-			</div>
-		{% endfor %}
-	{% else %}
-		<div class="alert alert-info top-spaced"><strong>No tienes alumnos por evaluar.</strong> <a href="/busqueda"></a></div>
-	{% endif %}
+    <hr noshade="noshade" class="nopadding" />
+    <div class="row">
+      <h3>Evaluaciones pendientes</h3>
+    </div>
+     {% if evaluaciones %}
+      {% for evaluacion in evaluaciones %}
+        <div class="row result-entry">
+          <div class="col-sm-8">
+              <h4>{{evaluacion.titulo}}</h4>
+              <p>{{evaluacion.descripcion|truncatechars:100}}</p>
+              <span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}} (<a onClick="denunciar('alumno', {{evaluacion.ayudante.usuario.id}})">Denunciar</a>)</span>
+              <span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
+          </div>
+          <div class="col-sm-1"><!-- Editar -->
+            <img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})" alt="Editar" title="Editar">
+          </div>
+          <div class="col-sm-1"><!-- Ver más -->
+            <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
+          </div>
+          <div class="col-sm-1"><!-- Solicitudes/Historial -->
+            <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
+          </div>
+          <div class="col-sm-1"><!-- Eliminar -->
+            <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info top-spaced"><strong>No tienes alumnos por evaluar.</strong> <a href="/busqueda"></a></div>
+    {% endif %}
 	</div>
 	<!-- END seccion "Evaluaciones pendientes" -->
-
 </div>
 
 
 
 <div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>
-
+<div id="resultDialog" class="message-dialog" title="Aceptar solicitud"></div>
+<div id="confirmarSolicitudDialog" class="message-dialog" title="Aceptar solicitud">
+  <h4 class="tcentered">¿Estás seguro de aceptar esta solicitud?</h4>
+  <div class="tcentered">
+    <form class="form" id="confirmarSolicitudForm" method="POST" action="/ayudantias/solicitud/">
+      {% csrf_token %}
+      <button type="button" class="btn btn-xs btn-success" onClick="confirmarSolicitudAyudantia({{solicitud.id}})">Sí, aceptar solicitud</button>
+    </form>
+  </div>
+</div>
 {% endblock %}
