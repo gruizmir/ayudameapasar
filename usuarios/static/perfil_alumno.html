@@ -244,30 +244,43 @@ $(function() {
 
 	<!-- seccion "Evaluaciones pendientes" -->
 	<div class="tab-pane fade" id="evaluaciones">
+    
     <hr noshade="noshade" class="nopadding" />
     <div class="row">
-      <h3>Evaluaciones pendientes</h3>
+      <h3>Evaluaciones a tus alumnos</h3>
     </div>
-     {% if evaluaciones %}
-      {% for evaluacion in evaluaciones %}
+    {% if evaluaciones_alumnos %}
+      {% for evaluacion in evaluaciones_alumnos %}
         <div class="row result-entry">
           <div class="col-sm-8">
-              <h4>{{evaluacion.titulo}}</h4>
-              <p>{{evaluacion.descripcion|truncatechars:100}}</p>
-              <span><strong>Alumno a evaluar:</strong> {{evaluacion.ayudante}} (<a onClick="denunciar('alumno', {{evaluacion.ayudante.usuario.id}})">Denunciar</a>)</span>
-              <span><strong>Categoría:</strong> {{evaluacion.categoria}} - {{evaluacion.subcategoria}}</span><br>
+              <h4>{{evaluacion.ayudantia.titulo}}</h4>
+              <span><strong>Alumno a evaluar:</strong> {{evaluacion.alumno.get_full_name}} (<a onClick="denunciar('alumno', {{evaluacion.alumno.id}})">Denunciar</a>)</span><br>
+              <span><strong>Categoría:</strong> {{evaluacion.ayudantia.categoria}} - {{evaluacion.ayudantia.ubcategoria}}</span><br>
           </div>
-          <div class="col-sm-1"><!-- Editar -->
-            <img class="img-btn" src="/static/img/edit.png" onClick="evaluar('alumno', {{evaluacion.ayudante.usuario.id}})" alt="Editar" title="Editar">
+          <div class="col-sm-1"><!-- Evaluar -->
+            <button class="btn btn-success" onClick="evaluar('alumno', {{evaluacion.alumno.id}})" title="Evaluar">Evaluar</button>
           </div>
-          <div class="col-sm-1"><!-- Ver más -->
-            <img class="img-btn" src="/static/img/more.png" alt="Ver más" title="Ver más">
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-info top-spaced"><strong>No tienes alumnos por evaluar.</strong> <a href="/busqueda"></a></div>
+    {% endif %}
+    
+    
+    <hr noshade="noshade" class="nopadding" />
+    <div class="row">
+      <h3>Evaluaciones a tus ayudantes</h3>
+    </div>
+    {% if evaluaciones_ayudantes %}
+      {% for eval in evaluaciones_ayudantes %}
+        <div class="row result-entry">
+          <div class="col-sm-10">
+              <h4>{{eval.ayudantia.titulo}}</h4>
+              <span><strong>Ayudante a evaluar:</strong> {{eval.ayudantia.ayudante}} (<a onClick="denunciar('ayudante', {{eval.ayudantia.ayudante.id}})">Denunciar</a>)</span><br>
+              <span><strong>Categoría:</strong> {{eval.ayudantia.categoria}} - {{eval.ayudantia.subcategoria}}</span><br>
           </div>
-          <div class="col-sm-1"><!-- Solicitudes/Historial -->
-            <img class="img-btn" src="/static/img/requests.png" alt="Historial" title="Historial de solicitudes">
-          </div>
-          <div class="col-sm-1"><!-- Eliminar -->
-            <img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
+          <div class="col-sm-2"><!-- Evaluar -->
+            <button class="btn btn-success" onClick="evaluar('ayudante', {{eval.ayudantia.ayudante.id}})" title="Evaluar">Evaluar</button>
           </div>
         </div>
       {% endfor %}
