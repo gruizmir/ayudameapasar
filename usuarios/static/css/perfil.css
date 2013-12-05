@@ -65,3 +65,22 @@
     padding: 10px;
     cursor:pointer;
 }
+
+.danger-box {
+    font-size: 0.8em;
+    margin-bottom:15px;
+}
+
+.danger-count {
+   background-image: url('/static/img/danger.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 47px;
+    width: 60px;
+    vertical-align: super;
+    text-align: center;
+    display: inline-block;
+    font-size: 3em;
+    font-family: 'Rufina', serif;
+    padding-right: 3px;
+}

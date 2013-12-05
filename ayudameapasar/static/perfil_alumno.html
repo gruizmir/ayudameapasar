@@ -74,6 +74,17 @@ $(function() {
 					<p>{{user.ayudante.puntuacion|floatformat|default:0}}</p>
 					<span>en {{user.ayudante.eval_qty}} calificaciones</span>
 				</div>
+        {% if reportes_alumno %}
+        <div class="danger-box">
+          <span class="danger-count">{{reportes_alumno}}</span> denuncias como alumno
+        </div>
+        {% endif %}
+        
+        {% if reportes_ayudante %}
+        <div class="danger-box">
+          <div class="danger-count">{{reportes_ayudante}}</div> denuncias como ayudante
+        </div>
+        {% endif %}
 			</div>
 		</div>
 	</div>

@@ -71,17 +71,27 @@ def evalAlumno(request, idAlumnoAyudantia=None):
     return HttpResponse(json, mimetype='application/json')
 
 
-def abusoAlumno(request, idAlumno=None):
+def abusoAlumno(request, idAlumnoAyudantia=None):
     if request.is_ajax():
         form = AbusoForm(request.POST)
         if form.is_valid():
             try:
-                alumno = User.objects.get(id=idAlumno)
+                alumnoAyudantia = AlumnoAyudantia.objects.get(id=idAlumnoAyudantia)
+                alumno = alumnoAyudantia.alumno
                 ayudante = request.user.ayudante
                 reporte = ReporteAbusoAlumno(alumno=alumno, reportador=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
                 reporte.save()
+                
+                perfil = alumno.perfil
+                perfil.eval_qty = perfil.eval_qty + 1
+                perfil.puntuacion = (perfil.puntuacion - 1)/perfil.eval_qty
+                perfil.save()
+                alumnoAyudantia.ayudante_evaluo = True
+                alumnoAyudantia.save()
+                
                 message = {"response": "OK"}
-            except:
+            except Exception as e:
+                print e
                 message = {"response": "ERROR", "result":"404"}
         else:
             message = {"response": "ERROR", "result":"WRONG DATA"}
@@ -91,20 +101,29 @@ def abusoAlumno(request, idAlumno=None):
     return HttpResponse(json, mimetype='application/json')
 
 
-def abusoAyudante(request, idAyudante=None):
+def abusoAyudante(request, idAlumnoAyudantia=None):
     if request.is_ajax():
         form = AbusoForm(request.POST)
         if form.is_valid():
             try:
-                ayudante = Ayudante.objects.get(id=idAyudante)
+                alumnoAyudantia = AlumnoAyudantia.objects.get(id=idAlumnoAyudantia)
+                ayudante = alumnoAyudantia.ayudantia.ayudante
                 alumno = request.user
                 reporte = ReporteAbusoAyudante(reportador=alumno, ayudante=ayudante, motivo=form.cleaned_data['motivo'], comentario=form.cleaned_data['comentario'])
                 reporte.save()
-                return HttpResponse("OK")
-            except:
-                return HttpResponse("ERROR")
+                
+                ayudante.eval_qty = ayudante.eval_qty + 1
+                ayudante.puntuacion = (ayudante.puntuacion - 1)/ayudante.eval_qty
+                ayudante.save()
+                alumnoAyudantia.alumno_evaluo = True
+                alumnoAyudantia.save()
+                
+                message = {"response": "OK"}
+            except Exception as e:
+                print e
+                message = {"response": "ERROR", "result":"404"}
         else:
-            return HttpResponse("ERROR")
+            message = {"response": "ERROR", "result":"WRONG DATA"}
     else:
         return HttpResponse("ERROR")
     json = simplejson.dumps(message)

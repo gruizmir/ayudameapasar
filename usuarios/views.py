@@ -13,6 +13,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import simplejson
+from evaluaciones.models import ReporteAbusoAlumno, ReporteAbusoAyudante
 from main.models import Institucion
 from usuarios.models import *
 from usuarios.forms import *
@@ -118,24 +119,24 @@ def mostrarPerfilPropio(request):
     data = {}
     user.profile = Perfil.objects.get(usuario = user)
     data['user'] = user
-
+    actual = datetime.now()
+    misSolicitudes  = AlumnoAyudantia.objects.filter(aceptada=False).filter(alumno=user).order_by("-id")
+    data['solicitudes'] = misSolicitudes
+    evaluar_mis_ayudantes = AlumnoAyudantia.objects.filter(alumno=user).filter(fecha_realizacion__lt = actual.date()).filter(alumno_evaluo=False)
+    data['evaluaciones_ayudantes'] = evaluar_mis_ayudantes
+    data['reportes_alumno'] = ReporteAbusoAlumno.objects.filter(alumno=user).count()
     if user.perfil.es_ayudante:
         try:
             ayudantias = Ayudantia.objects.filter(ayudante=user.ayudante)
             solicitudesPend = AlumnoAyudantia.objects.filter(aceptada=False).filter(ayudantia__in=ayudantias).order_by("-id")
-            misSolicitudes  = AlumnoAyudantia.objects.filter(aceptada=False).filter(alumno=user).order_by("-id")
-            agenda  = AlumnoAyudantia.objects.filter(aceptada=True).filter(ayudantia__in=ayudantias).order_by("-id")
-            actual = datetime.now()
+            agenda  = AlumnoAyudantia.objects.filter(aceptada=True).filter(ayudantia__in=ayudantias).filter(fecha_realizacion__gte = actual.date()).order_by("-id")
             evaluar_mis_alumnos = AlumnoAyudantia.objects.filter(ayudantia__in=ayudantias).filter(fecha_realizacion__lt = actual.date()).filter(ayudante_evaluo=False)
-            evaluar_mis_ayudantes = AlumnoAyudantia.objects.filter(alumno=user).filter(fecha_realizacion__lt = actual.date()).filter(alumno_evaluo=False)
             data['solicitudes_pend'] = solicitudesPend
-            data['solicitudes'] = misSolicitudes
             data['agenda'] = agenda
             data['ayudantias'] = ayudantias
             data['evaluaciones_alumnos'] = evaluar_mis_alumnos
-            data['evaluaciones_ayudantes'] = evaluar_mis_ayudantes
+            data['reportes_ayudante'] = ReporteAbusoAyudante.objects.filter(ayudante=user.ayudante).count()
             data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
-            
         except ObjectDoesNotExist:
             pass
     return render_to_response("perfil_alumno.html", data, context_instance=RequestContext(request))
