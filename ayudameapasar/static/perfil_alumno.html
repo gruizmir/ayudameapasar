@@ -37,14 +37,19 @@ $(function() {
 </script>
 
 <ul class="nav nav-tabs">
+  {% if is_owner %}
 	<li class="active"><a href="#mi_panel" data-toggle="tab">Mi panel</a></li>
 	<li><a href="#ayudantias" data-toggle="tab">Mis ayudantías</a></li>
 	<li><a href="#missolicitudes" data-toggle="tab">Mis solicitudes</a></li>
-	{% if request.user.perfil.es_ayudante %}
-		<li><a href="#solicitudespend" data-toggle="tab">Solicitudes pendientes</a></li>
-        <li><a href="#agenda" data-toggle="tab">Ayudantías agendadas</a></li>
-	{% endif %}
+    {% if request.user.perfil.es_ayudante %}
+      <li><a href="#solicitudespend" data-toggle="tab">Solicitudes pendientes</a></li>
+      <li><a href="#agenda" data-toggle="tab">Ayudantías agendadas</a></li>
+    {% endif %}
 	<li><a href="#evaluaciones" data-toggle="tab">Evaluaciones pendientes</a></li>
+  {% else %}
+    <li class="active"><a href="#mi_panel" data-toggle="tab">Perfil</a></li>
+    <li><a href="#ayudantias" data-toggle="tab">Ayudantías</a></li>
+  {% endif %}
 </ul>
 
 
@@ -101,6 +106,7 @@ $(function() {
 
 	<!-- seccion "Mis ayudantias" -->
 	<div class="tab-pane fade" id="ayudantias">
+     {% if is_owner %}
 			<div class="row top-spaced">
 				<div class="button-big">
 					<a href="{% url 'ayudantias.views.publicar_ayudantia' %}">
@@ -109,7 +115,8 @@ $(function() {
 					</a>
 				</div>
 			</div>
-			
+			{% endif %}
+      
 			<hr noshade="noshade" class="nopadding" />
 			<div class="row">
 				<h3>Ayudantías Activas</h3>
@@ -123,6 +130,7 @@ $(function() {
 						<p>{{ayudantia.descripcion|truncatechars:100}}</p>
 						<span><strong>Categorí­a:</strong> {{ayudantia.categoria}} - {{ayudantia.subcategoria}}</span><br>
 				</div>
+        {% if is_owner %}
 				<div class="col-lg-1"><!-- Editar -->
 					<a href="{% url 'ayudantias.views.editar_ayudantia' ayudantia.pk %}">
 						<img class="img-btn" src="/static/img/edit.png" alt="Editar" title="Editar">
@@ -144,6 +152,8 @@ $(function() {
 				<div class="col-lg-1"><!-- Eliminar -->
 					<img class="img-btn" src="/static/img/delete.png" alt="Eliminar" title="Eliminar">
 				</div>
+        {% endif %}
+        
 			</div>
 			{% empty %}
 		{% endfor %}
@@ -155,7 +165,8 @@ $(function() {
 
 
 
-	
+	{% if is_owner %}
+  
 	<!-- seccion "Mis solicitudes" -->
 	<div class="tab-pane fade" id="missolicitudes">
     <hr noshade="noshade" class="nopadding" />
@@ -306,8 +317,11 @@ $(function() {
     {% endif %}
 	</div>
 	<!-- END seccion "Evaluaciones pendientes" -->
+  
+  
+  {% endif %}
 </div>
-
+<!-- END tab content -->
 
 
 <div id="evalDialog" class="message-dialog" title="Evaluación o Denuncia"> </div>

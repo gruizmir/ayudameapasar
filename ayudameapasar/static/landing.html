@@ -59,14 +59,14 @@ $(function() {
             </div>
             <div class="box-ayudantia-ayudante">
               <div class="row">
-                <div class="col-md-5">{{ ayudantia.ayudante.usuario.get_full_name }}</div>
+                <div class="col-md-5"><a href="/cuentas/{{ayudantia.ayudante.usuario.id}}/perfil/">{{ ayudantia.ayudante.usuario.get_full_name }}</a></div>
                 <div class="col-md-7 text-right" style="padding-right: 0px;">{{ ayudantia.ayudante.puntuacion }} pts.</div>
               </div>
             </div>
             <div class="box-ayudantia-descripcion">{{ ayudantia.descripcion }}</div>
             <div class="box-ayudantia-toolbox">
               <div class="row text-right">
-                <img src="{{STATIC_URL}}img/more.png" alt="" onClick="getAyudantia({{ayudantia.id}})"/>
+                <img src="{{STATIC_URL}}img/more.png" alt="" onClick="getAyudantia({{ayudantia.id}})" title="Ver más"/>
                 <img src="{{STATIC_URL}}img/request.png" alt="" />
                 <button type="button" class="btn btn-xs btn-success" onClick="pedirHora({{ayudantia.id}})">Pedir hora</button>
               </div>

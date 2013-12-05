@@ -119,6 +119,7 @@ def mostrarPerfilPropio(request):
     data = {}
     user.profile = Perfil.objects.get(usuario = user)
     data['user'] = user
+    data['is_owner']=True
     actual = datetime.now()
     misSolicitudes  = AlumnoAyudantia.objects.filter(aceptada=False).filter(alumno=user).order_by("-id")
     data['solicitudes'] = misSolicitudes
@@ -144,11 +145,16 @@ def mostrarPerfilPropio(request):
 @login_required
 def mostrarPerfil(request, idUser):
     user = get_object_or_404(User, pk=idUser)
+    if request.user == user:
+        return HttpResponseRedirect("/cuentas/perfil/")
     data = {}
     data['user'] = user
+    data['is_owner'] = False
+    data['reportes_alumno'] = ReporteAbusoAlumno.objects.filter(alumno=user).count()
     if user.perfil.es_ayudante:
         try:
             data['ayudantias'] = Ayudantia.objects.filter(ayudante=user.ayudante)
+            data['reportes_ayudante'] = ReporteAbusoAyudante.objects.filter(ayudante=user.ayudante).count()
             data['info'] = InfoAcademica.objects.filter(ayudante=user.ayudante)
         except ObjectDoesNotExist:
             pass
